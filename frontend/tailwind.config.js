@@ -13,6 +13,9 @@ export default {
       themeRoot: ":root", // The element that receives theme color CSS variables
     },
     extend: {
+      height: {
+        fullh: "calc(100vh - 4rem)",
+      },
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
@@ -46,6 +49,7 @@ export default {
         card: {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
+          accented: "hsl(var(--accented-card))",
         },
       },
       borderRadius: {
@@ -69,5 +73,5 @@ export default {
       },
     },
   },
-  plugins: [],
+  plugins: [require("tailwindcss-animate")],
 };

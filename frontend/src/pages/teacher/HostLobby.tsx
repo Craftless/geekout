@@ -1,0 +1,137 @@
+import CustomErrorMessage from "@/components/ui/CustomErrorMessage";
+import {
+  AlertDialog,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Separator } from "@/components/ui/separator";
+import { useToast } from "@/components/ui/use-toast";
+import { GameContext } from "@/context/game-context";
+import { socket } from "@/socket";
+import { Field, Form, Formik, FormikHelpers } from "formik";
+import { useContext, useEffect, useState } from "react";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
+import * as Yup from "yup";
+
+const HostLobby = () => {
+  const { qid } = useParams();
+  const location = useLocation();
+  const navigate = useNavigate();
+  const { toast } = useToast();
+  const [open, setOpen] = useState(false);
+  const [state, setState] = useState(location.state || undefined);
+
+  const game = useContext(GameContext);
+
+  useEffect(() => {
+    // keep in mind this runs twice in dev
+    if (!qid) {
+      navigate("/");
+      return;
+    }
+    if (!state) {
+      setOpen(true);
+      return;
+    }
+    const onConnect = () => {
+      socket.emitEvent(
+        "check_create_room",
+        state.roomCode,
+        async (success: boolean) => {
+          if (!success) {
+            toast({
+              variant: "destructive",
+              title: "Error!",
+              description: "Room already exists",
+              duration: 2000,
+            });
+            return;
+          }
+          await game.createRoom(state.roomCode, qid);
+        }
+      );
+      socket.addEvent("student_join", (studentData: { username: string }) => {
+        game.addStudent(studentData.username);
+      });
+      socket.addEvent("student_leave", (studentData: { username: string }) => {
+        console.log(studentData.username + " left!");
+        game.removeStudent(studentData.username);
+      });
+    };
+
+    socket.connect(onConnect);
+  }, [game.createRoom, game.addStudent, game.removeStudent, state]);
+
+  function submitHandler(
+    values: { code: string },
+    { setSubmitting }: FormikHelpers<{ code: string }>
+  ) {
+    setState({ roomCode: values.code });
+    setSubmitting(false);
+  }
+
+  if (!state)
+    return (
+      // TODO remove code duplication
+      <AlertDialog open={open} onOpenChange={setOpen}>
+        <AlertDialogTrigger asChild>
+          <Button>Host Room</Button>
+        </AlertDialogTrigger>
+        <AlertDialogContent className="overflow-y-scroll max-h-[70%] min-w-[40%]">
+          <AlertDialogHeader>
+            <AlertDialogTitle>Host Room</AlertDialogTitle>
+            <AlertDialogDescription>Enter a room code.</AlertDialogDescription>
+          </AlertDialogHeader>
+          <Separator />
+          <Formik
+            initialValues={{
+              code: "",
+            }}
+            validationSchema={Yup.object().shape({
+              code: Yup.string().trim().required("Code required"),
+            })}
+            onSubmit={submitHandler}
+          >
+            <Form className="flex flex-col gap-4">
+              <div>
+                <Field as={Input} name="code"></Field>
+                <CustomErrorMessage name="code" />
+              </div>
+              <Button type="submit">Host</Button>
+            </Form>
+          </Formik>
+        </AlertDialogContent>
+      </AlertDialog>
+    );
+
+  return (
+    <div className="p-8 flex flex-col items-center">
+      <p>Quiz ID: {game.quizId}</p>
+      <p className="text-lg md:text-2xl font-bold">
+        Room Code: {game.roomCode}
+      </p>
+      <div className="flex max-w-[80%] flex-wrap gap-6 justify-center py-8">
+        {game.students.map((s) => (
+          <Card key={s.username} className="px-16 py-8">
+            <p>{s.username}</p>
+          </Card>
+        ))}
+      </div>
+      <Button
+        onClick={() => {
+          navigate("/teacher/host");
+        }}
+      >
+        Start Quiz
+      </Button>
+    </div>
+  );
+};
+
+export default HostLobby;
