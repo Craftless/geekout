@@ -1,5 +1,6 @@
 import EditQuizComponent from "@/components/EditQuizComponent";
 import CustomErrorMessage from "@/components/ui/CustomErrorMessage";
+import { Input } from "@/components/ui/CustomInput";
 import LoadingSpinner from "@/components/ui/LoadingSpinner";
 import {
   AlertDialog,
@@ -28,7 +29,6 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from "@/components/ui/drawer";
-import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 import {
   Sheet,

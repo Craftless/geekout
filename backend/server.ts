@@ -5,7 +5,8 @@ import mongoSanitise from "express-mongo-sanitize";
 import http from "http";
 import mongoose from "mongoose";
 import { Server } from "socket.io";
-import { default as presentationsRoutes, default as usersRoutes } from "./routes/users-routes";
+import presentationsRoutes from "./routes/presentations-routes";
+import usersRoutes from "./routes/users-routes";
 import socketMain from "./sockets/sockets";
 import { HttpError } from "./util/http-error";
 
@@ -50,7 +51,7 @@ app.use(
 );
 
 app.use("/api/users", usersRoutes);
-app.use("/api/presentations", presentationsRoutes);
+app.use("/api/quizzes", presentationsRoutes);
 
 app.use((req, res, next) => {
   next(new HttpError("Could not find this route", 404));

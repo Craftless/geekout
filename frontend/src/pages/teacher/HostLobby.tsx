@@ -1,4 +1,5 @@
 import CustomErrorMessage from "@/components/ui/CustomErrorMessage";
+import { Input } from "@/components/ui/CustomInput";
 import {
   AlertDialog,
   AlertDialogContent,
@@ -9,7 +10,6 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 import { useToast } from "@/components/ui/use-toast";
 import { GameContext } from "@/context/game-context";

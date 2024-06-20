@@ -5,64 +5,236 @@
 @layer base {
   :root {
     --background: 0 0% 100%;
-    --foreground: 20 14.3% 4.1%;
+    --foreground: 222.2 84% 4.9%;
 
     --card: 0 0% 100%;
-    --card-foreground: 20 14.3% 4.1%;
+    --card-foreground: 222.2 84% 4.9%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 20 14.3% 4.1%;
+    --popover-foreground: 222.2 84% 4.9%;
 
-    --primary: 24 9.8% 10%;
-    --primary-foreground: 60 9.1% 97.8%;
+    --primary: 222.2 47.4% 11.2%;
+    --primary-foreground: 210 40% 98%;
 
-    --secondary: 60 4.8% 95.9%;
-    --secondary-foreground: 24 9.8% 10%;
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
 
-    --muted: 60 4.8% 95.9%;
-    --muted-foreground: 25 5.3% 44.7%;
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
 
-    --accent: 60 4.8% 95.9%;
-    --accent-foreground: 24 9.8% 10%;
+    --accent: 210 40% 96.1%;
+    --accent-foreground: 222.2 47.4% 11.2%;
 
     --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 60 9.1% 97.8%;
+    --destructive-foreground: 210 40% 98%;
 
-    --border: 20 5.9% 90%;
-    --input: 20 5.9% 90%;
-    --ring: 20 14.3% 4.1%;
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 222.2 84% 4.9%;
 
     --radius: 0.5rem;
   }
 
   .dark {
-    --background: 20 14.3% 4.1%;
-    --foreground: 60 9.1% 97.8%;
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
 
-    --card: 20 14.3% 4.1%;
-    --card-foreground: 60 9.1% 97.8%;
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
 
-    --popover: 20 14.3% 4.1%;
-    --popover-foreground: 60 9.1% 97.8%;
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
 
-    --primary: 60 9.1% 97.8%;
-    --primary-foreground: 24 9.8% 10%;
+    --primary: 210 40% 98%;
+    --primary-foreground: 222.2 47.4% 11.2%;
 
-    --secondary: 12 6.5% 15.1%;
-    --secondary-foreground: 60 9.1% 97.8%;
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
 
-    --muted: 12 6.5% 15.1%;
-    --muted-foreground: 24 5.4% 63.9%;
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
 
-    --accent: 12 6.5% 15.1%;
-    --accent-foreground: 60 9.1% 97.8%;
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 210 40% 98%;
 
     --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 60 9.1% 97.8%;
+    --destructive-foreground: 210 40% 98%;
 
-    --border: 12 6.5% 15.1%;
-    --input: 12 6.5% 15.1%;
-    --ring: 24 5.7% 82.9%;
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 212.7 26.8% 83.9%;
+  }
+
+  .light-purple {
+    --background: 207 56% 96%;
+    --foreground: 241 5% 0%;
+    --card: 241 50% 90%;
+    --card-foreground: 241 5% 10%;
+    --popover: 241 100% 95%;
+    --popover-foreground: 241 100% 0%;
+    --primary: 241 75% 76.5%;
+    --primary-foreground: 0 0% 0%;
+    --secondary: 241 30% 70%;
+    --secondary-foreground: 0 0% 0%;
+    --muted: 203 30% 85%;
+    --muted-foreground: 241 5% 35%;
+    --accent: 203 30% 80%;
+    --accent-foreground: 241 5% 10%;
+    --destructive: 0 100% 30%;
+    --destructive-foreground: 241 5% 90%;
+    --border: 241 30% 50%;
+    --input: 241 30% 18%;
+    --ring: 241 75% 76.5%;
+    --radius: 0.5rem;
+  }
+
+  /* .dark-purple {
+    --background: 241 50% 5%;
+    --foreground: 241 5% 90%;
+    --card: 241 50% 0%;
+    --card-foreground: 241 5% 90%;
+    --popover: 241 50% 5%;
+    --popover-foreground: 241 5% 90%;
+    --primary: 241 75% 76.5%;
+    --primary-foreground: 0 0% 0%;
+    --secondary: 241 30% 10%;
+    --secondary-foreground: 0 0% 100%;
+    --muted: 203 30% 15%;
+    --muted-foreground: 241 5% 60%;
+    --accent: 203 30% 15%;
+    --accent-foreground: 241 5% 90%;
+    --destructive: 0 100% 30%;
+    --destructive-foreground: 241 5% 90%;
+    --border: 241 30% 18%;
+    --input: 241 30% 18%;
+    --ring: 241 75% 76.5%;
+    --radius: 0.5rem;
+   } */
+
+  /* Name: custom color palette
+       Author: Ilias Ism
+       URL: https://gradient.page
+
+    CSS: .bg-gradient { background: var(--gradient) } */
+
+  .dark-purple {
+    --gradient: #9796f0;
+
+    --background: 256 48.75% 6.08%;
+    --foreground: 256 7.5% 98.8%;
+
+    --muted: 256 37.5% 22.8%;
+    --muted-foreground: 256 7.5% 57.6%;
+
+    --popover: 256 50% 9.88%;
+    --popover-foreground: 256 7.5% 98.8%;
+
+    --card: 256 50% 9.88%;
+    --card-foreground: 256 7.5% 98.8%;
+
+    --border: 256 37.5% 22.8%;
+    --input: 256 37.5% 22.8%;
+
+    --primary: 256 75% 76%;
+    --primary-foreground: 256 7.5% 7.6%;
+
+    --secondary: 256 37.5% 22.8%;
+    --secondary-foreground: 256 7.5% 98.8%;
+
+    --accent: 256 37.5% 22.8%;
+    --accent-foreground: 256 7.5% 98.8%;
+
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 256 7.5% 98.8%;
+
+    --ring: 256 75% 76%;
+  }
+  /*
+  .light-purple {
+    Name: custom color palette
+       Author: Ilias Ism
+       URL: https://gradient.page
+
+    CSS: .bg-gradient { background: var(--gradient) }
+    --gradient: #411a5b;
+    --background: 293 97.8% 98.46%;
+    --foreground: 293 5.6% 0.92%;
+
+    --muted: 293 5.6% 92.3%;
+    --muted-foreground: 293 2.8% 42.3%;
+
+    --popover: 293 45.2% 92.3%;
+    --popover-foreground: 293 5.6% 1.15%;
+
+    --card: 293 45.2% 92.3%;
+    --card-foreground: 293 5.6% 1.15%;
+
+    --border: 293 10.6% 89.92%;
+    --input: 293 10.6% 89.92%;
+
+    --primary: 293 56% 23%;
+    --primary-foreground: 293 1.12% 92.3%;
+
+    --secondary: 293 2.8% 96.15%;
+    --secondary-foreground: 293 4.36% 12.3%;
+
+    --accent: 293 2.8% 96.15%;
+    --accent-foreground: 293 4.36% 12.3%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+
+    --ring: 293 56% 23%;
+
+    --radius: 0.5rem;
+  } 
+  */
+  .lighter-purple {
+    --background: 0 0% 90%;
+    --foreground: 224 71.4% 4.1%;
+    --accented-card: 256 40% 87%;
+    --accented-card-foreground: 224 71.4% 4.1%;
+    --card: 0 0% 87%;
+    --card-foreground: 224 71.4% 4.1%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 224 71.4% 4.1%;
+    --primary: 257 82% 49%;
+    --primary-foreground: 210 20% 98%;
+    --secondary: 256 56% 74%;
+    --secondary-foreground: 220.9 39.3% 11%;
+    --muted: 220 14.3% 95.9%;
+    --muted-foreground: 220 8.9% 46.1%;
+    --accent: 257 30% 80%;
+    --accent-foreground: 257 86% 23%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 20% 98%;
+    --border: 0 0% 82%;
+    --input: 0 0% 82%;
+    --ring: 262.1 83.3% 57.8%;
+    --radius: 0.5rem;
+  }
+
+  .darker-purple {
+    --background: 0 0% 10%;
+    --foreground: 210 20% 98%;
+    --card: 0 0% 13%;
+    --card-foreground: 210 20% 98%;
+    --accented-card: 256 46% 12%;
+    --popover: 224 71.4% 4.1%;
+    --popover-foreground: 210 20% 98%;
+    --primary: 263 83% 43%;
+    --primary-foreground: 210 20% 98%;
+    --secondary: 256 56% 26%;
+    --secondary-foreground: 210 20% 98%;
+    --muted: 215 27.9% 16.9%;
+    --muted-foreground: 217.9 10.6% 64.9%;
+    --accent: 257 37% 22%;
+    --accent-foreground: 256 86% 77%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 20% 98%;
+    --border: 0 0% 20%;
+    --input: 0 0% 20%;
+    --ring: 263.4 70% 50.4%;
   }
 }
 
@@ -72,5 +244,38 @@
   }
   body {
     @apply bg-background text-foreground;
+  }
+}
+
+@layer components {
+  /* .my-react-select-container {
+    } */
+  .my-react-select-container .my-react-select__control {
+    @apply bg-white dark:bg-neutral-700 border-2 border-neutral-300 dark:border-neutral-700 hover:border-neutral-400 dark:hover:border-neutral-500;
+  }
+
+  .my-react-select-container .my-react-select__control--is-focused {
+    @apply border-neutral-500 hover:border-neutral-500 dark:border-neutral-400 dark:hover:border-neutral-400 shadow-none;
+  }
+
+  .my-react-select-container .my-react-select__menu {
+    @apply bg-neutral-100 dark:bg-neutral-700 border-2 border-neutral-300 dark:border-neutral-600;
+  }
+
+  .my-react-select-container .my-react-select__option {
+    @apply text-neutral-600 dark:text-neutral-200 bg-neutral-100 hover:bg-neutral-200 dark:bg-neutral-700 dark:hover:bg-neutral-800;
+  }
+  /* .my-react-select-container .my-react-select__option--is-focused {
+      @apply bg-neutral-200 dark:bg-neutral-800;
+    } */
+
+  .my-react-select-container .my-react-select__indicator-separator {
+    @apply bg-neutral-400;
+  }
+
+  .my-react-select-container .my-react-select__input-container,
+  .my-react-select-container .my-react-select__placeholder,
+  .my-react-select-container .my-react-select__single-value {
+    @apply text-neutral-600 dark:text-neutral-200;
   }
 }

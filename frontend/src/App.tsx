@@ -9,6 +9,14 @@ import AuthPage from "./pages/AuthPage";
 import Error from "./pages/Error";
 import HomePage from "./pages/HomePage";
 import RootLayout from "./pages/RootLayout";
+import StudentLobby from "./pages/StudentLobby";
+import StudentQuizPage from "./pages/StudentQuizPage";
+import AllQuizzesListPage from "./pages/teacher/AllQuizzesListPage";
+import CreateQuizPage from "./pages/teacher/CreateQuizPage";
+import HostLobby from "./pages/teacher/HostLobby";
+import TeacherQuizPage from "./pages/teacher/TeacherQuizPage";
+import UserQuizzesListPage from "./pages/teacher/UserQuizzesListPage";
+import ViewQuizPage from "./pages/teacher/ViewQuizPage";
 
 const router = createBrowserRouter([
   {
@@ -32,13 +40,44 @@ const router = createBrowserRouter([
             path: "auth",
             element: <AuthPage />,
           },
+          {
+            path: "start",
+            element: <StudentQuizPage />,
+          },
+          {
+            path: "lobby",
+            element: <StudentLobby />,
+          },
         ],
       },
       {
         path: "teacher",
         element: <TeacherRoutesComponent />,
         children: [
-          // teacher pages
+          {
+            index: true,
+            element: <AllQuizzesListPage />,
+          },
+          {
+            path: ":uid/quizzes",
+            element: <UserQuizzesListPage />,
+          },
+          {
+            path: "quizzes/new",
+            element: <CreateQuizPage />,
+          },
+          {
+            path: "quizzes/view/:qid",
+            element: <ViewQuizPage />,
+          },
+          {
+            path: "host/lobby/:qid",
+            element: <HostLobby />,
+          },
+          {
+            path: "host",
+            element: <TeacherQuizPage />,
+          },
         ],
       },
     ],

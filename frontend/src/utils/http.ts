@@ -1,4 +1,4 @@
-import { CreateQuizFormValues } from "@/components/teacher/CreateQuizForm";
+import { CreateQuizFormValues } from "@/components/presentations/CreateQuizForm";
 import { toast } from "@/components/ui/use-toast";
 import { IAuthContext } from "@/context/auth-context";
 import { QuizResponseData, findDeleted } from "@/lib/utils";

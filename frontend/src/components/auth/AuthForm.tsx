@@ -5,9 +5,9 @@ import { useContext } from "react";
 import * as Yup from "yup";
 import { AuthContext } from "../../context/auth-context";
 import CustomErrorMessage from "../ui/CustomErrorMessage";
+import { Input } from "../ui/CustomInput";
 import { Button } from "../ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
-import { Input } from "../ui/input";
 
 interface AuthFormValues {
   username: string;

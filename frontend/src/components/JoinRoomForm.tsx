@@ -3,10 +3,10 @@ import { Field, Form, Formik } from "formik";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import * as Yup from "yup";
+import { Input } from "./ui/CustomInput";
 import LoadingSpinner from "./ui/LoadingSpinner";
 import { Button } from "./ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
-import { Input } from "./ui/input";
 import { useToast } from "./ui/use-toast";
 
 let handler: NodeJS.Timeout | null;

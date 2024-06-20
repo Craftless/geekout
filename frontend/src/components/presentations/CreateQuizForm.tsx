@@ -7,6 +7,7 @@ import * as Yup from "yup";
 import { SelectField } from "../SelectField";
 import Checkmark from "../ui/Checkmark";
 import CustomErrorMessage from "../ui/CustomErrorMessage";
+import { Input } from "../ui/CustomInput";
 import { Alert, AlertDescription, AlertTitle } from "../ui/alert";
 import {
   AlertDialog,
@@ -20,7 +21,6 @@ import {
   AlertDialogTrigger,
 } from "../ui/alert-dialog";
 import { Button } from "../ui/button";
-import { Input } from "../ui/input";
 
 export interface CreateQuizFormValues {
   title: string;
