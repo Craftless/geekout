@@ -31,6 +31,7 @@ mongoose
   .then(() => console.log("💻 Mondodb Connected"))
   .catch((err) => console.error(err));
 
+console.log(process.env.CLIENT_URL);
 app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader(

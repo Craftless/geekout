@@ -94,6 +94,7 @@ const GameContextProvider = ({ children }: { children: ReactNode }) => {
 
   const createRoom = useCallback(
     async (code: string, quizId: string) => {
+      console.log("here");
       console.log("Creating room");
       setRoomCode(code || (Math.random() * 1000).toString());
       console.log(code);

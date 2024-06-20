@@ -5,6 +5,7 @@ import App from "./App.tsx";
 import { ThemeProvider } from "./components/ui/theme-provider.tsx";
 import { Toaster } from "./components/ui/toaster.tsx";
 import { AuthContextProvider } from "./context/auth-context.tsx";
+import GameContextProvider from "./context/game-context.tsx";
 import "./index.css";
 import { queryClient } from "./utils/http.ts";
 
@@ -13,8 +14,10 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
     <QueryClientProvider client={queryClient}>
       <ThemeProvider defaultTheme="system">
         <AuthContextProvider>
-          <App />
-          <Toaster />
+          <GameContextProvider>
+            <App />
+            <Toaster />
+          </GameContextProvider>
         </AuthContextProvider>
       </ThemeProvider>
     </QueryClientProvider>
