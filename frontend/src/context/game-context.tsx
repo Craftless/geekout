@@ -76,13 +76,14 @@ const GameContextProvider = ({ children }: { children: ReactNode }) => {
   const retrieveData = useCallback(
     async (qid: string) => {
       try {
-        const { quiz }: { quiz: QuizResponseData } = await sendRequest(
-          `${import.meta.env.VITE_SERVER_ADDRESS}/api/quizzes/${qid}`,
-          {
-            Authorization: "Bearer " + auth.token,
-          }
-        );
-        return quiz;
+        const { presentation }: { presentation: QuizResponseData } =
+          await sendRequest(
+            `${import.meta.env.VITE_SERVER_ADDRESS}/api/quizzes/${qid}`,
+            {
+              Authorization: "Bearer " + auth.token,
+            }
+          );
+        return presentation;
       } catch (err) {}
     },
     [sendRequest, auth.token]
@@ -100,7 +101,10 @@ const GameContextProvider = ({ children }: { children: ReactNode }) => {
       console.log(code);
       setQuizId(quizId);
       const quiz = await retrieveData(quizId);
-      if (!quiz) return;
+      if (!quiz) {
+        alert("No quiz");
+        return;
+      }
       setLoadedQuiz(quiz);
       setQuestions(quiz.questions);
       socket.emitEvent(
