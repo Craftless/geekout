@@ -1,5 +1,14 @@
 import { cn, getObjectValues, numberToString } from "@/lib/utils";
-import { Field, FieldArray, Form, Formik, FormikHelpers } from "formik";
+import { AI } from "@/utils/http";
+import { useMutation } from "@tanstack/react-query";
+import {
+  Field,
+  FieldArray,
+  FieldArrayRenderProps,
+  Form,
+  Formik,
+  FormikHelpers,
+} from "formik";
 import { AlertCircle } from "lucide-react";
 import { LiaGlobeSolid, LiaLockSolid } from "react-icons/lia";
 import { MdAdd, MdDeleteForever } from "react-icons/md";
@@ -22,6 +31,7 @@ import {
 } from "../ui/alert-dialog";
 import { Button } from "../ui/button";
 import PresentationUpload from "../ui/presentation-upload";
+import { useToast } from "../ui/use-toast";
 
 export interface CreateQuizFormValues {
   title: string;
@@ -47,22 +57,7 @@ const initialValues: CreateQuizFormValues = {
   description: "",
   isPublic: "true",
   slides: "",
-  questions: [
-    {
-      statement: "",
-      questionType: "",
-      correctAnswer: "",
-      afterSlide: 0,
-      choices: [
-        {
-          choiceNumber: 1,
-          choiceBody: "",
-          correctChoice: false,
-        },
-      ],
-      _id: "new",
-    },
-  ],
+  questions: [],
 };
 
 const validationSchema = Yup.object().shape({
@@ -168,6 +163,40 @@ const CreateQuizForm = ({
   submitButtonText?: string;
   initialFormValues?: CreateQuizFormValues;
 }) => {
+  const { mutate, isPending } = useMutation({
+    mutationFn: AI,
+  });
+  const { toast } = useToast();
+  function AIGenerateQuestions(
+    arrayHelpers: FieldArrayRenderProps,
+    values: CreateQuizFormValues
+  ) {
+    const slides = values.slides;
+    if (!slides) {
+      toast({
+        variant: "destructive",
+        title: "Generating questions failed!",
+        description: "You have not uploaded any slides.",
+        duration: 3000,
+      });
+      return;
+    }
+    mutate(values.slides);
+    arrayHelpers.push({
+      _id: "new",
+      statement: "",
+      questionType: "",
+      afterSlide: 0,
+      correctAnswer: "",
+      choices: [
+        {
+          choiceNumber: 1,
+          choiceBody: "",
+          correctChoice: false,
+        },
+      ],
+    });
+  }
   return (
     <Formik
       initialValues={initialFormValues || initialValues}
@@ -418,6 +447,13 @@ const CreateQuizForm = ({
                     variant={"default"}
                   >
                     Add a question
+                  </Button>
+                  <Button
+                    type="button"
+                    onClick={() => AIGenerateQuestions(arrayHelpers, values)}
+                    variant={"default"}
+                  >
+                    Let AI generate questions
                   </Button>
                 </div>
               )}

@@ -73,6 +73,18 @@ export async function deleteQuiz({
   });
 }
 
+export async function AI({ auth, file }: NonGETRequestFn & { file: File }) {
+  if (!file) throw new Error("File does not exist!");
+  const response = await sendRequest({
+    url: `${import.meta.env.VITE_SERVER_ADDRESS}/api/quizzes/ai`,
+    headers: {
+      Authorization: "Bearer " + auth.token,
+    },
+    method: "POST",
+  });
+  console.log(response);
+}
+
 export async function fetchQuiz({
   signal,
   auth,
