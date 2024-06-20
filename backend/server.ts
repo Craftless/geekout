@@ -1,6 +1,6 @@
 import "dotenv/config";
 
-import express, { NextFunction, Request, Response } from "express";
+import express from "express";
 import mongoSanitise from "express-mongo-sanitize";
 import http from "http";
 import mongoose from "mongoose";
@@ -9,6 +9,14 @@ import usersRoutes from "./routes/users-routes";
 import { HttpError } from "./util/http-error";
 
 const app = express();
+
+declare module "express-serve-static-core" {
+  interface Request {
+    userData?: {
+      userId: string;
+    };
+  }
+}
 
 app.use(express.json());
 
