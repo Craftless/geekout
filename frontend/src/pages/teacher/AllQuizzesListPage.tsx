@@ -24,7 +24,7 @@ const AllQuizzesListPage = () => {
   });
 
   return (
-    <div className="h-screen">
+    <div className="h-fullh">
       <div className="hero h-[calc(40vh)] border-b-2 border-white/20 justify-start">
         <div className="hero-content text-left">
           <div className="">

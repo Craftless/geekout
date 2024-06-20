@@ -163,7 +163,7 @@ const CreateQuizForm = ({
   submitButtonText?: string;
   initialFormValues?: CreateQuizFormValues;
 }) => {
-  const { mutate, isPending } = useMutation({
+  const { mutate } = useMutation({
     mutationFn: AI,
   });
   const { toast } = useToast();
@@ -236,7 +236,7 @@ const CreateQuizForm = ({
           </div>
           <div>
             {/* <Field type="file" id="slides" name="slides" /> */}
-            <PresentationUpload id="" setFieldValue={setFieldValue} />
+            <PresentationUpload setFieldValue={setFieldValue} />
           </div>
           <div className="md:border rounded md:px-6 py-4 my-6">
             <p className="text-lg font-bold mb-4">Questions</p>
@@ -317,7 +317,7 @@ const CreateQuizForm = ({
                                             <div className="col-start-1 col-span-1 justify-self-center self-center rounded-full bg-sky-700 h-8 w-8 flex justify-center items-center">
                                               <p className="text-center text-white">
                                                 {numberToString(
-                                                  choiceIndex + 1
+                                                  choiceIndex
                                                 ).toUpperCase()}
                                               </p>
                                             </div>

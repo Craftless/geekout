@@ -31,42 +31,6 @@ const CreateQuizPage = () => {
     },
   });
 
-  function createDummyQuiz() {
-    createQuizSubmitHandler({
-      title: "Dummy",
-      isPublic: "false",
-      slides: null,
-      questions: [
-        {
-          _id: "new",
-          afterSlide: 0,
-          questionType: "FRQ",
-          statement: "statement",
-          correctAnswer: "correct",
-        },
-        {
-          _id: "new",
-          questionType: "MCQ",
-          statement: "mcq",
-          afterSlide: 0,
-          choices: [
-            {
-              choiceNumber: 1,
-              choiceBody: "wrong choice",
-              correctChoice: false,
-            },
-            {
-              choiceNumber: 2,
-              choiceBody: "correct choice",
-              correctChoice: true,
-            },
-          ],
-        },
-      ],
-      description: "description",
-    });
-  }
-
   async function createQuizSubmitHandler(values: CreateQuizFormValues) {
     mutate({ values, auth });
   }

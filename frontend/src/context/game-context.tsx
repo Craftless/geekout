@@ -29,6 +29,7 @@ interface GameData {
   ) => Promise<void>;
   slides: Buffer[];
   slideNumberToQuestion: (Question | undefined)[];
+  questionNumberMap: { [key: string]: number };
   addSlide: (slide: Buffer, page: number) => void;
   addStudent: (username: string) => void;
   removeStudent: (username: string) => void;
@@ -58,6 +59,7 @@ export const GameContext = createContext<GameData>({
   slideNumberToQuestion: [],
   studentResponses: [],
   slides: [],
+  questionNumberMap: {},
   addSlide: () => {},
   createRoom: async () => {},
   getQuestions: () => {},
@@ -80,19 +82,34 @@ const GameContextProvider = ({ children }: { children: ReactNode }) => {
   const [loadedQuiz, setLoadedQuiz] = useState<QuizResponseData>();
   const [slides, setSlides] = useState<Buffer[]>([]);
   const [roomCode, setRoomCode] = useState("");
-  // const [data, setData] = useState<QuizResponseData>();
   const [questions, setQuestions] = useState<Question[]>([]);
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [slideNumberToQuestion, setSlideNumberToQuestion] = useState<
     (Question | undefined)[]
   >([]);
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [questionNumberMap, setQuestionNumberMap] = useState<{
+    [key: string]: number;
+  }>({});
+
   const { sendRequest } = useHttpClient();
   const auth = useContext(AuthContext);
   const { toast } = useToast();
   const [studentResponses, setStudentResponses] = useState<StudentResponse[]>(
     []
   );
+
+  useEffect(() => {
+    const mp: { [key: string]: number } = {};
+    let count = 0;
+    slideNumberToQuestion.forEach((v) => {
+      if (v) {
+        mp[v._id] = count;
+        count++;
+      }
+    });
+    setQuestionNumberMap(mp);
+  }, [slideNumberToQuestion]);
 
   const retrieveData = useCallback(
     async (qid: string) => {
@@ -198,6 +215,8 @@ const GameContextProvider = ({ children }: { children: ReactNode }) => {
     [socket, questions.length]
   );
   const assignQuestions = (numOfSlides: number, questions: Question[]) => {
+    let count = 0;
+    console.log("quesitons", questions);
     for (const question of questions) {
       const afterSlide = question.afterSlide;
       for (let i = 0; i < 5; i++) {
@@ -209,10 +228,10 @@ const GameContextProvider = ({ children }: { children: ReactNode }) => {
             copy[slideNo] = question;
             return copy;
           });
-          console.log(question.statement, slideNo);
           break;
         }
       }
+      count++;
     }
   };
 
@@ -262,6 +281,7 @@ const GameContextProvider = ({ children }: { children: ReactNode }) => {
         students,
         loadedQuiz,
         questions,
+        questionNumberMap,
         slideNumberToQuestion,
         currentQuestion,
         currentSlide,

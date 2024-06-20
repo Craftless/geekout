@@ -3,21 +3,12 @@ import { useToast } from "@/components/ui/use-toast";
 import { GameContext } from "@/context/game-context";
 import { QuizResponseData } from "@/lib/utils";
 import { socket } from "@/socket";
+import { ArrowUpNarrowWide } from "lucide-react";
 import { useContext, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { ArrowUpNarrowWide } from "lucide-react";
-import {
-  Sheet,
-  SheetContent,
-  SheetDescription,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from "@/components/ui/sheet";
 
 const StudentLobby = () => {
   const [students, setStudents] = useState<string[]>([]);
-  const [roomCode, setRoomCode] = useState<string>("");
   const game = useContext(GameContext);
   const navigate = useNavigate();
   const { toast } = useToast();
@@ -52,7 +43,6 @@ const StudentLobby = () => {
             console.log(students);
             setStudents(students);
             game.joinRoom(roomCode, qid, quizData, numOfSlides);
-            setRoomCode(roomCode);
           } else {
             if (status.value !== null) {
               toast({

@@ -8,7 +8,6 @@ interface RoomInfo {
   quizId: string;
   quizData: QuizResponseData;
   totalQuestions: number;
-  currentQuestion: number;
   currentSlide: number;
   started: boolean;
   answers: StudentResponse[][]; // question, answer
@@ -34,7 +33,6 @@ export function createRoom(
     quizId,
     quizData: quizData,
     totalQuestions,
-    currentQuestion: 0,
     currentSlide: 0,
     started: false,
     answers: Array(totalQuestions).fill([]),
@@ -60,17 +58,17 @@ export function updateResponseStatusAndScore(
 ) {
   const room = rooms.get(roomCode);
   if (!room) return;
-  const resIdx = room.answers[room.currentQuestion].findIndex(
+  const resIdx = room.answers[response.questionNumber].findIndex(
     (val) => val.id === response.id
   );
   if (resIdx === -1) return;
-  room.answers[room.currentQuestion][resIdx].status = status;
+  room.answers[response.questionNumber][resIdx].status = status;
   const scoresIdx = room.scores.findIndex(
     (val) => val.student === response.username
   );
   if (scoresIdx === -1) return;
   console.log(response.status);
-  room.scores[scoresIdx].scoresByQuestion[room.currentQuestion] =
+  room.scores[scoresIdx].scoresByQuestion[response.questionNumber] =
     status === "Correct" ? 1000 : 0;
 }
 
@@ -98,12 +96,15 @@ export function submitAnswer(
   roomCode: string,
   username: string,
   answer: string,
-  id: string
+  id: string,
+  qnId: string,
+  questionNumber: number
 ) {
   const room = rooms.get(roomCode);
   if (!room) return;
   let correct = false;
-  const currentQuestion = room.quizData.questions[room.currentQuestion];
+  const currentQuestion = room.quizData.questions.find((qn) => qn._id === qnId);
+  if (!currentQuestion) return;
   if (currentQuestion.questionType === "FRQ") {
     correct = answer === currentQuestion.correctAnswer; // placeholder
   } else if (currentQuestion.questionType === "MCQ") {
@@ -120,16 +121,20 @@ export function submitAnswer(
     username,
     answer,
     id,
+    qnId,
+    questionNumber,
     status: correct ? "Correct" : "Ungraded",
   };
-  room.answers[room.currentQuestion].push(response);
+  console.log(questionNumber);
+  console.log(room.answers.length, room.totalQuestions);
+  room.answers[questionNumber].push(response);
   return response;
 }
 
 export function removeAnswer(roomCode: string, id: string) {
   const room = rooms.get(roomCode);
   if (!room) return;
-  room.answers[room.currentQuestion].filter((v) => v.id !== id);
+  room.answers = room.answers.map((ans) => ans.filter((v) => v.id !== id));
 }
 
 export interface QuizResponseData {
@@ -167,9 +172,11 @@ export type StudentResponseStatus =
 
 export type StudentResponse = {
   id: string;
+  qnId: string;
   username: string;
   answer: string;
   status: StudentResponseStatus;
+  questionNumber: number;
 };
 
 // Correct: 1000
