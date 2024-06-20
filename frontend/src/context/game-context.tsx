@@ -1,6 +1,11 @@
 import { useToast } from "@/components/ui/use-toast";
 import { useHttpClient } from "@/hooks/http-hook";
-import { Question, QuizResponseData, StudentResponse } from "@/lib/utils";
+import {
+  Question,
+  QuizResponseData,
+  StudentResponse,
+  getRandomInt,
+} from "@/lib/utils";
 import { socket } from "@/socket";
 import {
   ReactNode,
@@ -23,6 +28,7 @@ interface GameData {
     numOfSlides: number
   ) => Promise<void>;
   slides: Buffer[];
+  slideNumberToQuestion: Question[];
   addSlide: (slide: Buffer, page: number) => void;
   addStudent: (username: string) => void;
   removeStudent: (username: string) => void;
@@ -49,6 +55,7 @@ export const GameContext = createContext<GameData>({
   questions: [],
   currentQuestion: 0,
   currentSlide: 0,
+  slideNumberToQuestion: [],
   studentResponses: [],
   slides: [],
   addSlide: () => {},
@@ -76,6 +83,9 @@ const GameContextProvider = ({ children }: { children: ReactNode }) => {
   // const [data, setData] = useState<QuizResponseData>();
   const [questions, setQuestions] = useState<Question[]>([]);
   const [currentQuestion, setCurrentQuestion] = useState(0);
+  const [slideNumberToQuestion, setSlideNumberToQuestion] = useState<
+    (Question | undefined)[]
+  >([]);
   const [currentSlide, setCurrentSlide] = useState(0);
   const { sendRequest } = useHttpClient();
   const auth = useContext(AuthContext);
@@ -151,7 +161,7 @@ const GameContextProvider = ({ children }: { children: ReactNode }) => {
       setQuizId(quizId);
       setLoadedQuiz(quiz);
       setQuestions(quiz.questions);
-      // assignQuestions(numOfSlides, quiz.questions);
+      assignQuestions(numOfSlides, quiz.questions);
     },
     []
   );
@@ -187,7 +197,23 @@ const GameContextProvider = ({ children }: { children: ReactNode }) => {
     },
     [socket, questions.length]
   );
-  const assignQuestions = () => {};
+  const assignQuestions = (numOfSlides: number, questions: Question[]) => {
+    for (const question of questions) {
+      const afterSlide = question.afterSlide;
+      for (let i = 0; i < 5; i++) {
+        // try 5 times
+        const slideNo = getRandomInt(afterSlide, numOfSlides - 1);
+        if (!slideNumberToQuestion[slideNo]) {
+          setSlideNumberToQuestion((prev) => {
+            const copy = [...prev];
+            copy[slideNo] = question;
+            return copy;
+          });
+          break;
+        }
+      }
+    }
+  };
 
   const changeSlide = useCallback(
     (slideNumber: number, teacher?: boolean) => {
@@ -234,6 +260,7 @@ const GameContextProvider = ({ children }: { children: ReactNode }) => {
         students,
         loadedQuiz,
         questions,
+        slideNumberToQuestion,
         currentQuestion,
         currentSlide,
         studentResponses,
