@@ -4,7 +4,9 @@ import express, { NextFunction, Request, Response } from "express";
 import mongoSanitise from "express-mongo-sanitize";
 import http from "http";
 import mongoose from "mongoose";
-import usersRoutes from "./routes/users-routes";
+import { Server } from "socket.io";
+import { default as presentationsRoutes, default as usersRoutes } from "./routes/users-routes";
+import socketMain from "./sockets/sockets";
 import { HttpError } from "./util/http-error";
 
 const app = express();
@@ -48,6 +50,7 @@ app.use(
 );
 
 app.use("/api/users", usersRoutes);
+app.use("/api/presentations", presentationsRoutes);
 
 app.use((req, res, next) => {
   next(new HttpError("Could not find this route", 404));
@@ -63,3 +66,38 @@ app.use((err: any, req: Request, res: Response, next: NextFunction) => {
 });
 
 server.listen(process.env.PORT || 9000);
+
+const io = new Server<
+  ClientToServerEvents,
+  ServerToClientEvents,
+  InterServerEvents,
+  SocketData
+>(server, {
+  cors: {
+    origin: process.env.CLIENT_URL,
+    methods: ["GET", "POST"],
+    credentials: true,
+  },
+});
+
+socketMain(io);
+
+interface ServerToClientEvents {
+  noArg: () => void;
+  basicEmit: (a: number, b: string, c: Buffer) => void;
+  withAck: (d: string, callback: (e: number) => void) => void;
+}
+
+interface ClientToServerEvents {
+  hello: () => void;
+  join_room: (room: string) => void;
+}
+
+interface InterServerEvents {
+  ping: () => void;
+}
+
+interface SocketData {
+  name: string;
+  age: number;
+}

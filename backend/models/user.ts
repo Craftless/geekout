@@ -1,5 +1,6 @@
-import mongoose from "mongoose";
+import mongoose, { PopulatedDoc } from "mongoose";
 import uniqueValidator from "mongoose-unique-validator";
+import { IPresentation } from "./presentation";
 
 const Schema = mongoose.Schema;
 
@@ -8,6 +9,7 @@ export interface IUser {
   id: string;
   username: string;
   password: string;
+  presentations: PopulatedDoc<IPresentation>[];
 }
 
 const userSchema = new Schema<IUser>({
@@ -20,6 +22,13 @@ const userSchema = new Schema<IUser>({
     type: String,
     required: true,
   },
+  presentations: [
+    {
+      type: mongoose.Types.ObjectId,
+      required: true,
+      ref: "Presentation",
+    },
+  ],
 });
 
 userSchema.plugin(uniqueValidator);
