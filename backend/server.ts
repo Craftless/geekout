@@ -24,6 +24,8 @@ declare module "express-serve-static-core" {
 
 export const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
+app.use("/images", express.static(path.join("images")));
+
 app.use(express.json());
 
 const server = http.createServer(app);
@@ -54,8 +56,6 @@ app.use(
     },
   })
 );
-
-app.use("/images", express.static(path.join("images")));
 
 app.use("/api/users", usersRoutes);
 app.use("/api/quizzes", presentationsRoutes);
