@@ -28,7 +28,7 @@ interface GameData {
     numOfSlides: number
   ) => Promise<void>;
   slides: Buffer[];
-  slideNumberToQuestion: Question[];
+  slideNumberToQuestion: (Question | undefined)[];
   addSlide: (slide: Buffer, page: number) => void;
   addStudent: (username: string) => void;
   removeStudent: (username: string) => void;

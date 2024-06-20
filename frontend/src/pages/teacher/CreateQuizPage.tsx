@@ -1,4 +1,3 @@
-import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useToast } from "@/components/ui/use-toast";
 import { AuthContext } from "@/context/auth-context";
@@ -97,8 +96,8 @@ const CreateQuizPage = () => {
         </Card>
       )}
       {!isDesktop && <div className="py-4 px-6">{content}</div>}
-      <p>For debugging purposes:</p>
-      <Button onClick={createDummyQuiz}>Create Dummy Quiz</Button>
+      {/* <p>For debugging purposes:</p>
+      <Button onClick={createDummyQuiz}>Create Dummy Quiz</Button> */}
     </div>
   );
 };
