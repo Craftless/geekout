@@ -223,11 +223,11 @@ const ViewQuizPage = () => {
   return (
     <div className="p-3  flex flex-col items-center">
       {isPending && <LoadingSpinner asOverlay />}
-      <div className="gap-2 my-5">
+      <div className="flex flex-col gap-3 my-5">
         <h1 className="text-3xl font-semibold ">
           {data.title} <span className="text-accent "></span>{" "}
         </h1>
-        <p>Description: {data.description || "No description"}</p>
+        <p> {data.description || "No Description"}</p>
         <p className="text-xs text-accent font-semibold">
           {data.isPublic ? "Public" : "Private"}
         </p>
@@ -255,7 +255,14 @@ const ViewQuizPage = () => {
                 <tr key={question._id}>
                   <th>{index + 1}</th>
                   <td>{question.statement}</td>
-                  <td>{question.choices && formatOptions(question.choices)}</td>
+                  <td>
+                    {question.questionType == "MCQ" &&
+                      question.choices &&
+                      formatOptions(question.choices)}
+                    {question.questionType == "FRQ" && (
+                      <span className="italic">Free Response</span>
+                    )}
+                  </td>
                 </tr>
               ))}
             </tbody>

@@ -60,8 +60,13 @@ const TeacherQuizPage = () => {
       <p>
         Question: {game.currentQuestion + 1}/{game.questions.length}
       </p>
+      <div>
+        <div className="skeleton w-72 h-44 mx-auto my-5"></div>
+      </div>
+      <p className="italic text-xl">{currentQuestion.statement}</p>
+
       <p>Type: {currentQuestion.questionType}</p>
-      <p>Statement: {currentQuestion.statement}</p>
+
       <div className="container mx-auto py-10">
         <DataTable columns={columns} data={game.studentResponses} />
       </div>

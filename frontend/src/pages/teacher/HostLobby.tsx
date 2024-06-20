@@ -116,12 +116,32 @@ const HostLobby = () => {
 
   return (
     <div className="p-8 flex flex-col items-center">
-      <p>Quiz ID: {game.quizId}</p>
-      <p className="text-lg md:text-2xl font-bold my-2">
-        Room Code: <span className="text-yellow-400">{game.roomCode}</span>
-      </p>
+      <div className="gap-3 mb-6">
+        {" "}
+        <h1 className="text-3xl font-semibold">Join Today's Lesson.</h1>
+        <p className="text-lg md:text-2xl font-bold my-2">
+          Room Code: <span className="text-yellow-400">{game.roomCode}</span>
+        </p>
+      </div>
+
       <div className="skeleton flex h-80 w-10/12 items-end justify-end rounded-sm bg-black/20 p-6">
         <p> 20</p>{" "}
+      </div>
+      <p className="text-xs opacity-20">Quiz ID: {game.quizId}</p>
+      <div className="my-6">
+        <button
+          className="btn btn-primary btn-wide"
+          onClick={() => {
+            navigate("/teacher/host");
+          }}
+        >
+          Start Quiz
+        </button>
+      </div>
+
+      <div className="w-full text-start font-semibold text-xl my-3 border-b-2 border-white/20 py-3">
+        {" "}
+        Participants Joined: {game.students.length}{" "}
       </div>
       <div className="flex max-w-[80%] flex-wrap gap-6 justify-center py-8">
         {game.students.map((s) => (
@@ -130,13 +150,6 @@ const HostLobby = () => {
           </Card>
         ))}
       </div>
-      <Button
-        onClick={() => {
-          navigate("/teacher/host");
-        }}
-      >
-        Start Quiz
-      </Button>
     </div>
   );
 };
