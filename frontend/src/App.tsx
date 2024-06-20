@@ -1,35 +1,70 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { Suspense, useContext, useLayoutEffect } from "react";
+import { RouterProvider, createBrowserRouter } from "react-router-dom";
+import "./App.css";
+import TeacherRoutesComponent from "./components/auth/TeacherRoutesComponent";
+import UnauthenticatedRoutesComponent from "./components/auth/UnauthenticatedRoutesComponent";
+import LoadingSpinner from "./components/ui/LoadingSpinner";
+import { AuthContext } from "./context/auth-context";
+import AuthPage from "./pages/AuthPage";
+import Error from "./pages/Error";
+import HomePage from "./pages/HomePage";
+import RootLayout from "./pages/RootLayout";
+
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: (
+      <Suspense fallback={<LoadingSpinner />}>
+        <RootLayout />
+      </Suspense>
+    ),
+    errorElement: <Error />,
+    children: [
+      {
+        path: "",
+        element: <UnauthenticatedRoutesComponent />,
+        children: [
+          {
+            index: true,
+            element: <HomePage />,
+          },
+          {
+            path: "auth",
+            element: <AuthPage />,
+          },
+        ],
+      },
+      {
+        path: "teacher",
+        element: <TeacherRoutesComponent />,
+        children: [
+          // teacher pages
+        ],
+      },
+    ],
+  },
+]);
 
 function App() {
-  const [count, setCount] = useState(0)
-
+  const auth = useContext(AuthContext);
+  useLayoutEffect(() => {
+    const userData = localStorage.getItem("userData");
+    if (userData) {
+      const storedData = JSON.parse(userData);
+      if (
+        storedData &&
+        storedData.token &&
+        storedData.expiration > Date.now()
+      ) {
+        auth.login(storedData.userId, storedData.token, storedData.expiration);
+      }
+    }
+  }, [auth, auth.login]);
   return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    // <QueryClientProvider client={queryClient}> tanstack query
+    <RouterProvider router={router} />
+    // </QueryClientProvider>
+  );
 }
 
-export default App
+export default App;

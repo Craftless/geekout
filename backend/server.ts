@@ -1,10 +1,9 @@
 import "dotenv/config";
 
-import express from "express";
+import express, { NextFunction, Request, Response } from "express";
 import mongoSanitise from "express-mongo-sanitize";
 import http from "http";
 import mongoose from "mongoose";
-import quizzesRoutes from "./routes/quizzes-routes";
 import usersRoutes from "./routes/users-routes";
 import { HttpError } from "./util/http-error";
 
@@ -48,7 +47,6 @@ app.use(
   })
 );
 
-app.use("/api/quizzes", quizzesRoutes);
 app.use("/api/users", usersRoutes);
 
 app.use((req, res, next) => {
