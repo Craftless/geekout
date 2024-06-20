@@ -72,7 +72,7 @@ const StudentQuizPage = () => {
           aria-label="close sidebar"
           className="drawer-overlay"
         ></label>
-        <div className="p-4 w-80 min-h-full bg-base-200 text-base-content  flex flex-col items-start">
+        <div className="p-4 w-80 min-h-full bg-base-200 text-base-content flex flex-col items-start">
           <h1 className="font-bold text-xl">Leaderboard</h1>
           <div className="divider"></div>
 
