@@ -1,20 +1,16 @@
 /** @type {import('tailwindcss').Config} */
-module.exports = {
-  darkMode: ["class"],
-  content: [
-    './pages/**/*.{ts,tsx}',
-    './components/**/*.{ts,tsx}',
-    './app/**/*.{ts,tsx}',
-    './src/**/*.{ts,tsx}',
-  ],
-  prefix: "",
+export default {
+  content: [],
   theme: {
-    container: {
-      center: true,
-      padding: "2rem",
-      screens: {
-        "2xl": "1400px",
-      },
+    daisyui: {
+      themes: false, // false: only light + dark | true: all themes | array: specific themes like this ["light", "dark", "cupcake"]
+      darkTheme: "dark", // name of one of the included themes for dark mode
+      base: true, // applies background color and foreground color for root element by default
+      styled: true, // include daisyUI colors and design decisions for all components
+      utils: true, // adds responsive and modifier utility classes
+      prefix: "", // prefix for daisyUI classnames (components, modifiers and responsive class names. Not colors)
+      logs: true, // Shows info about daisyUI version and used config in the console when building your CSS
+      themeRoot: ":root", // The element that receives theme color CSS variables
     },
     extend: {
       colors: {
@@ -73,5 +69,5 @@ module.exports = {
       },
     },
   },
-  plugins: [require("tailwindcss-animate")],
-}
+  plugins: [],
+};
