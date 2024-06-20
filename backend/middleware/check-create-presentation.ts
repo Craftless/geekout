@@ -28,6 +28,11 @@ export default (req: Request, res: Response, next: NextFunction) => {
         isString: true,
         notEmpty: true,
       },
+      "questions.*.afterSlide": {
+        errorMessage: "Invalid after slide",
+        isNumeric: true,
+        notEmpty: true,
+      },
       "questions.*.questionType": {
         isIn: {
           options: [["MCQ", "FRQ"]],

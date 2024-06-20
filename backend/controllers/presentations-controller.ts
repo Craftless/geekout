@@ -24,6 +24,7 @@ interface Presentation {
 interface Question {
   statement: string;
   questionType: "MCQ" | "FRQ";
+  afterSlide: number;
   correctAnswer?: string;
   choices?: {
     choiceNumber: number;
@@ -37,6 +38,7 @@ interface QuestionRequestData {
   statement: string;
   questionType: "MCQ" | "FRQ";
   correctAnswer?: string;
+  afterSlide: number;
   choices?: {
     choiceNumber: number;
     choiceBody: string;
@@ -115,6 +117,7 @@ const createQuestionFromArgs = async (
       questionType: question.questionType,
       choices: question.choices,
       correctAnswer: question.correctAnswer,
+      afterSlide: question.afterSlide,
       parentPresentation: parentPresentation._id,
     });
     await createdQuestion.save({ session });
