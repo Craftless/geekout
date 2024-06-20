@@ -67,10 +67,10 @@ const TeacherQuizPage = () => {
       </div>
       <Button
         onClick={() => {
-          game.changeQuestion(game.currentQuestion + 1, true);
+          game.changeQuestion(game.currentQuestion - 1, true);
         }}
       >
-        Next question
+        Previous slide
       </Button>
       <Button
         onClick={() => {

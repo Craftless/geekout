@@ -22,6 +22,8 @@ const StudentQuizPage = () => {
       // new Buffer(game.slides[game.currentQuestion]).toString("base64")
     );
   }, [socket, game]);
+
+  const currentQuestion = game.slideNumberToQuestion[game.currentSlide];
   return (
     <div className="w-full flex flex-col items-center h-screen justify-center">
       <img
@@ -31,15 +33,15 @@ const StudentQuizPage = () => {
         }
         alt="image"
       />
-      <div className="md:w-[70%] md:min-w-[450px] w-[90%]">
-        <p>
-          Question {game.currentQuestion + 1}/{game.questions.length}:
-        </p>
-        <QuestionItem
-          question={game.questions[game.currentQuestion]}
-          roomCode={game.roomCode}
-        />
-      </div>
+      {currentQuestion && (
+        <div className="md:w-[70%] md:min-w-[450px] w-[90%]">
+          <p>
+            Surprise Question!
+            {/* Question {game.currentQuestion + 1}/{game.questions.length}: */}
+          </p>
+          <QuestionItem question={currentQuestion} roomCode={game.roomCode} />
+        </div>
+      )}
     </div>
   );
 };
