@@ -96,8 +96,6 @@ const CreateQuizPage = () => {
         </Card>
       )}
       {!isDesktop && <div className="py-4 px-6">{content}</div>}
-      {/* <p>For debugging purposes:</p>
-      <Button onClick={createDummyQuiz}>Create Dummy Quiz</Button> */}
     </div>
   );
 };

@@ -1,7 +1,7 @@
 import { randomUUID } from "crypto";
 import path, { dirname } from "path";
 import { pdf } from "pdf-to-img";
-import { Server } from "socket.io";
+import { Server, Socket } from "socket.io";
 import { fileURLToPath } from "url";
 import {
   QuizResponseData,
@@ -177,6 +177,8 @@ function socketMain(io: Server) {
       console.log("Submitting answer", answer);
       const id = randomUUID();
       const response = submitAnswer(roomCode, socket.username, answer, id);
+      if (!response) return;
+      updateResponseStatus(io, socket, response, response.status);
       io.to(hostId).emit("t_submit_answer", response);
     });
     socket.on("s_delete_answer", (id) => {
@@ -187,13 +189,7 @@ function socketMain(io: Server) {
     socket.on(
       "s_update_response_status",
       (response: StudentResponse, status: StudentResponseStatus) => {
-        if (!socket.host) return;
-        updateResponseStatusAndScore(socket.host, response, status);
-        io.to(socket.host).emit("t_update_response_status", {
-          ...response,
-          status,
-        } as StudentResponse);
-        console.log("Here");
+        updateResponseStatus(io, socket, response, status);
       }
     );
     socket.on("s_fetch_scores", () => {
@@ -204,6 +200,20 @@ function socketMain(io: Server) {
     });
   });
 }
+
+const updateResponseStatus = (
+  io: Server,
+  socket: Socket,
+  response: StudentResponse,
+  status: StudentResponseStatus
+) => {
+  if (!socket.host) return;
+  updateResponseStatusAndScore(socket.host, response, status);
+  io.to(socket.host).emit("t_update_response_status", {
+    ...response,
+    status,
+  } as StudentResponse);
+};
 
 export default socketMain;
 
