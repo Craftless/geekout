@@ -9,6 +9,7 @@ export interface QuizzesResponseData {
   description: string;
   isPublic: boolean;
   creator: string;
+  slides: string;
   updatedAt: string;
   questionsLength: number;
   quizId: string;

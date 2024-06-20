@@ -4,6 +4,7 @@ import express, { NextFunction, Request, Response } from "express";
 import mongoSanitise from "express-mongo-sanitize";
 import http from "http";
 import mongoose from "mongoose";
+import path from "path";
 import { Server } from "socket.io";
 import presentationsRoutes from "./routes/presentations-routes";
 import usersRoutes from "./routes/users-routes";
@@ -50,6 +51,8 @@ app.use(
     },
   })
 );
+
+app.use("/images", express.static(path.join("images")));
 
 app.use("/api/users", usersRoutes);
 app.use("/api/quizzes", presentationsRoutes);

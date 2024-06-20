@@ -159,6 +159,8 @@ export async function fetchQuizzes({
       "title",
       "description",
       "isPublic",
+      "slides",
+      "slideCount",
       "creator",
       "updatedAt",
       "questions",
@@ -166,8 +168,8 @@ export async function fetchQuizzes({
     );
     picked.questionsLength = picked.questions.length;
     picked.quizId = picked._id;
-    picked._id = undefined;
-    picked.questions = undefined;
+    delete picked._id;
+    delete picked.questions;
     return picked;
   });
   return quizzes;
@@ -179,6 +181,8 @@ interface ResponseData {
       __v: number;
       _id: string;
       title: string;
+      slides: string;
+      slideCount: number;
       description: string;
       isPublic: boolean;
       creator: string;

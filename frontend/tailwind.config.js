@@ -21,7 +21,7 @@ export default {
     },
     extend: {
       height: {
-        fullh: "calc(100vh - 4rem)",
+        fullh: "calc(100vh - 8rem)",
       },
       colors: {
         border: "hsl(var(--border))",

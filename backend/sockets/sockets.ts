@@ -74,15 +74,10 @@ function socketMain(io: Server) {
           socket.roomCode = room;
           console.log("Successful join");
           io.to(room).emit("student_join", { username });
+          // @ts-ignore
+          const __dirname = dirname(fileURLToPath(import.meta.url));
           const document = await pdf(
-            path.join(
-              // @ts-ignore
-              dirname(fileURLToPath(import.meta.url)),
-              "..",
-              "uploads",
-              "slides",
-              rm.quizData.slides
-            )
+            path.join(__dirname, "..", "uploads", "slides", rm.quizData.slides)
           );
           let count = 0;
           for await (const image of document) {

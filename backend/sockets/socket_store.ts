@@ -138,6 +138,7 @@ export interface QuizResponseData {
   description?: string;
   isPublic: boolean;
   slides: string;
+  slideCount: number;
   creator: {
     _id: string;
     username: string;
