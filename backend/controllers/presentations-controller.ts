@@ -57,6 +57,7 @@ const createPresentationFromArgs = async (
   title: string,
   description: string,
   isPublic: string,
+  slides: string,
   questions: any,
   creator: string,
   next: NextFunction
@@ -66,6 +67,7 @@ const createPresentationFromArgs = async (
       title,
       description,
       isPublic,
+      slides,
       questions: [],
       creator,
     }
@@ -132,13 +134,17 @@ export const createPresentation = async (
   if (!errors.isEmpty()) {
     return next(new HttpError("Invalid inputs", 422));
   }
-
+  if (!req.file) {
+    return next(new HttpError("No slides were uploaded", 422));
+  }
   const { reqBody } = req.body;
   const { title, description, isPublic, questions } = JSON.parse(reqBody); // questions will be an array
+  console.log(req.file?.filename);
   const createdPresentation = await createPresentationFromArgs(
     title,
     description,
     isPublic,
+    req.file.filename,
     questions,
     req.userData!.userId,
     next

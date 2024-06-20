@@ -67,6 +67,10 @@ const StudentLobby = () => {
       socket.addEvent("c_start_quiz", () => {
         navigate("/start");
       });
+      socket.addEvent("slides", (image, page) => {
+        game.addSlide(image, page);
+        console.log(image);
+      });
     };
 
     const data = localStorage.getItem("studentJoinData");

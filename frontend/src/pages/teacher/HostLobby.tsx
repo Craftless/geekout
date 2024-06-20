@@ -63,6 +63,10 @@ const HostLobby = () => {
         console.log(studentData.username + " left!");
         game.removeStudent(studentData.username);
       });
+      socket.addEvent("slides", (image, page) => {
+        game.addSlide(image, page);
+        console.log(image);
+      });
     };
 
     socket.connect(onConnect);

@@ -13,9 +13,24 @@ const StudentQuizPage = () => {
       console.log("Client change qn", questionNumber);
       game.changeQuestion(questionNumber);
     });
+    socket.addEvent("c_change_slide", (slideNumber: number) => {
+      console.log("Client change slide", slideNumber);
+      game.changeSlide(slideNumber);
+    });
+    console.log(
+      "img"
+      // new Buffer(game.slides[game.currentQuestion]).toString("base64")
+    );
   }, [socket, game]);
   return (
     <div className="w-full flex flex-col items-center h-screen justify-center">
+      <img
+        src={
+          // "data:image/jpg;base-64," +
+          URL.createObjectURL(new Blob([game.slides[game.currentSlide]]))
+        }
+        alt="image"
+      />
       <div className="md:w-[70%] md:min-w-[450px] w-[90%]">
         <p>
           Question {game.currentQuestion + 1}/{game.questions.length}:

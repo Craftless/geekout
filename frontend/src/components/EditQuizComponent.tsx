@@ -68,10 +68,11 @@ const EditQuizComponent = ({
 
   useEffect(() => {
     if (!quizData) return;
-    const { questions, isPublic, description, title, _id } = quizData;
+    const { questions, isPublic, description, title, _id, slides } = quizData;
     const newFormData = {
       title,
       description: description || "",
+      slides,
       isPublic: String(isPublic),
       questions,
       _id,

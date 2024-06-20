@@ -7,7 +7,7 @@ export interface IPresentation {
   title: string;
   description?: string;
   isPublic: boolean;
-  slides: string[];
+  slides: string;
   questions: PopulatedDoc<IQuestion>[];
   creator: PopulatedDoc<IUser>;
 }
@@ -24,6 +24,10 @@ const presentationSchema = new Schema<IPresentation>(
     isPublic: {
       type: Boolean,
       default: true,
+    },
+    slides: {
+      type: String,
+      required: true,
     },
     questions: [
       {

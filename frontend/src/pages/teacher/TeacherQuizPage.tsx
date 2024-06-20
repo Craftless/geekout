@@ -74,6 +74,13 @@ const TeacherQuizPage = () => {
       </Button>
       <Button
         onClick={() => {
+          game.changeSlide(game.currentSlide + 1, true);
+        }}
+      >
+        Next slide
+      </Button>
+      <Button
+        onClick={() => {
           socket.emitEvent("s_fetch_scores");
         }}
       >

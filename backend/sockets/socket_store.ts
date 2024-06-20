@@ -9,6 +9,7 @@ interface RoomInfo {
   quizData: QuizResponseData;
   totalQuestions: number;
   currentQuestion: number;
+  currentSlide: number;
   started: boolean;
   answers: StudentResponse[][]; // question, answer
   scores: StudentScores[];
@@ -34,6 +35,7 @@ export function createRoom(
     quizData: quizData,
     totalQuestions,
     currentQuestion: 0,
+    currentSlide: 0,
     started: false,
     answers: Array(totalQuestions).fill([]),
     scores: [],
@@ -135,6 +137,7 @@ export interface QuizResponseData {
   title: string;
   description?: string;
   isPublic: boolean;
+  slides: string;
   creator: {
     _id: string;
     username: string;

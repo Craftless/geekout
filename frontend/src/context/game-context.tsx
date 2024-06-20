@@ -21,10 +21,13 @@ interface GameData {
     quizId: string,
     quiz: QuizResponseData
   ) => Promise<void>;
+  slides: Buffer[];
+  addSlide: (slide: Buffer, page: number) => void;
   addStudent: (username: string) => void;
   removeStudent: (username: string) => void;
   startQuiz: () => string;
   changeQuestion: (questionNumber: number, teacher?: boolean) => void;
+  changeSlide: (slideNumber: number, teacher?: boolean) => void;
   getQuestions: () => void;
   addStudentResponse: (response: StudentResponse) => void;
   removeStudentResponse: (id: string) => void;
@@ -34,6 +37,7 @@ interface GameData {
   loadedQuiz?: QuizResponseData;
   questions: Question[];
   currentQuestion: number;
+  currentSlide: number;
 }
 
 export const GameContext = createContext<GameData>({
@@ -43,7 +47,10 @@ export const GameContext = createContext<GameData>({
   loadedQuiz: undefined,
   questions: [],
   currentQuestion: 0,
+  currentSlide: 0,
   studentResponses: [],
+  slides: [],
+  addSlide: () => {},
   createRoom: async () => {},
   getQuestions: () => {},
   joinRoom: async () => {},
@@ -54,6 +61,7 @@ export const GameContext = createContext<GameData>({
   removeStudentResponse: () => {},
   updateStudentResponse: () => {},
   changeQuestion: () => {},
+  changeSlide: () => {},
 });
 
 const GameContextProvider = ({ children }: { children: ReactNode }) => {
@@ -62,10 +70,12 @@ const GameContextProvider = ({ children }: { children: ReactNode }) => {
     { username: string; score: number[] }[]
   >([]);
   const [loadedQuiz, setLoadedQuiz] = useState<QuizResponseData>();
+  const [slides, setSlides] = useState<Buffer[]>([]);
   const [roomCode, setRoomCode] = useState("");
   // const [data, setData] = useState<QuizResponseData>();
   const [questions, setQuestions] = useState<Question[]>([]);
   const [currentQuestion, setCurrentQuestion] = useState(0);
+  const [currentSlide, setCurrentSlide] = useState(0);
   const { sendRequest } = useHttpClient();
   const auth = useContext(AuthContext);
   const { toast } = useToast();
@@ -171,6 +181,19 @@ const GameContextProvider = ({ children }: { children: ReactNode }) => {
     [socket, questions.length]
   );
 
+  const changeSlide = useCallback(
+    (slideNumber: number, teacher?: boolean) => {
+      if (slideNumber < slides.length && slideNumber >= 0) {
+        setCurrentSlide(slideNumber);
+        if (teacher) socket.emitEvent("s_change_slide", slideNumber);
+        console.log("Changing slide ", slideNumber);
+      } else {
+        console.log("Length: ", slides.length);
+      }
+    },
+    [socket, slides.length]
+  );
+
   const addStudentResponse = useCallback((response: StudentResponse) => {
     setStudentResponses((cur) => [...cur, response]);
   }, []);
@@ -187,6 +210,14 @@ const GameContextProvider = ({ children }: { children: ReactNode }) => {
     setStudentResponses((cur) => cur.filter((v) => v.id !== id));
   }, []);
 
+  const addSlide = (slide: Buffer, page: number) => {
+    setSlides((cur) => {
+      const copy = [...cur];
+      copy[page] = slide;
+      return copy;
+    });
+  };
+
   return (
     <GameContext.Provider
       value={{
@@ -196,7 +227,10 @@ const GameContextProvider = ({ children }: { children: ReactNode }) => {
         loadedQuiz,
         questions,
         currentQuestion,
+        currentSlide,
         studentResponses,
+        slides,
+        addSlide,
         createRoom,
         getQuestions,
         joinRoom,
@@ -204,6 +238,7 @@ const GameContextProvider = ({ children }: { children: ReactNode }) => {
         removeStudent,
         startQuiz,
         changeQuestion,
+        changeSlide,
         addStudentResponse,
         removeStudentResponse,
         updateStudentResponse,

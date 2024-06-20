@@ -1,5 +1,8 @@
 import { randomUUID } from "crypto";
+import path, { dirname } from "path";
+import { pdf } from "pdf-to-img";
 import { Server } from "socket.io";
+import { fileURLToPath } from "url";
 import {
   QuizResponseData,
   StudentResponse,
@@ -51,24 +54,49 @@ function socketMain(io: Server) {
           });
           return;
         }
-        console.log(getRooms().get(room)?.students);
-        const rooms = socket.rooms;
-        rooms.forEach((room) => {
-          if (room !== socket.id) socket.leave(room);
-        });
-        joinRoom(room, username, socket);
-        socket.username = username;
-        await socket.join(room);
-        socket.roomCode = room;
-        console.log("Successful join");
-        io.to(room).emit("student_join", { username });
-        ack({
-          status: { value: true },
-          students: getRooms().get(room)?.students,
-          qid: getRooms().get(room)?.quizId,
-          quizData: getRooms().get(room)?.quizData,
-        });
-        if (getRooms().get(room)?.started) socket.emit("c_start_quiz");
+        const rm = getRooms().get(room);
+        if (!rm) {
+          ack({
+            status: {
+              value: false,
+              message: "Room does not exist with specified room code.",
+            },
+          });
+        } else {
+          console.log(getRooms().get(room)?.students);
+          const rooms = socket.rooms;
+          rooms.forEach((room) => {
+            if (room !== socket.id) socket.leave(room);
+          });
+          joinRoom(room, username, socket);
+          socket.username = username;
+          await socket.join(room);
+          socket.roomCode = room;
+          console.log("Successful join");
+          io.to(room).emit("student_join", { username });
+          const document = await pdf(
+            path.join(
+              // @ts-ignore
+              dirname(fileURLToPath(import.meta.url)),
+              "..",
+              "uploads",
+              "slides",
+              rm.quizData.slides
+            )
+          );
+          let count = 0;
+          for await (const image of document) {
+            io.to(room).emit("slides", image, count, document.length);
+            count++;
+          }
+          ack({
+            status: { value: true },
+            students: getRooms().get(room)?.students,
+            qid: getRooms().get(room)?.quizId,
+            quizData: getRooms().get(room)?.quizData,
+          });
+          if (getRooms().get(room)?.started) socket.emit("c_start_quiz");
+        }
       } else {
         ack({
           status: {
@@ -128,9 +156,18 @@ function socketMain(io: Server) {
       const room = getRooms().get(socket.host);
       if (!room) return;
       if (!room.started) return;
-      console.log("server change ", questionNumber);
+      console.log("server change question ", questionNumber);
       io.to(socket.host).emit("c_change_question", questionNumber);
       room.currentQuestion = questionNumber;
+    });
+    socket.on("s_change_slide", (slideNumber) => {
+      if (!socket.host) return;
+      const room = getRooms().get(socket.host);
+      if (!room) return;
+      if (!room.started) return;
+      console.log("server change slide ", slideNumber);
+      io.to(socket.host).emit("c_change_slide", slideNumber);
+      room.currentSlide = slideNumber;
     });
     socket.on("s_submit_answer", (roomCode, answer) => {
       if (!socket.username) return;

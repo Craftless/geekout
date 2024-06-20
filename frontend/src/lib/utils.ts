@@ -126,6 +126,7 @@ export interface QuizResponseData {
   title: string;
   description?: string;
   isPublic: boolean;
+  slides: string;
   creator: {
     _id: string;
     username: string;
