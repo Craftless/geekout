@@ -10,12 +10,18 @@ import {
 import checkAuth from "../middleware/check-auth";
 import checkCreatePresentation from "../middleware/check-create-presentation";
 import checkUpdatePresentation from "../middleware/check-update-presentation";
+import { fileUpload } from "../middleware/file-upload";
 
 const router = express.Router();
 
 router.use(checkAuth);
 
-router.post("/", checkCreatePresentation, createPresentation);
+router.post(
+  "/",
+  fileUpload.single("slides"),
+  checkCreatePresentation,
+  createPresentation
+);
 router.get("/all", getAllPublicPresentations);
 router.get("/user/:uid", getPresentationsByUserId);
 router.get("/:qid", getPresentationById);

@@ -96,7 +96,7 @@ export async function createQuiz({
   values: CreateQuizFormValues;
   auth: IAuthContext;
 }) {
-  const { questions, ...quizInfo } = values;
+  const { questions, slides, ...quizInfo } = values;
   const cleanedQuestions = [];
 
   for (const question of questions) {
@@ -110,13 +110,18 @@ export async function createQuiz({
     questions: cleanedQuestions,
   };
 
+  const formData = new FormData();
+  formData.append("slides", slides);
+  formData.append("reqBody", JSON.stringify(reqBody));
+
   await sendRequest({
     url: `${import.meta.env.VITE_SERVER_ADDRESS}/api/quizzes/`,
     headers: {
       Authorization: "Bearer " + auth.token,
+      "Content-Type": "multipart/form-data",
     },
     method: "POST",
-    data: reqBody,
+    data: formData,
   });
 }
 

@@ -21,11 +21,13 @@ import {
   AlertDialogTrigger,
 } from "../ui/alert-dialog";
 import { Button } from "../ui/button";
+import PresentationUpload from "../ui/presentation-upload";
 
 export interface CreateQuizFormValues {
   title: string;
   description?: string;
   isPublic: string;
+  slides: any;
   questions: {
     _id: string;
     statement: string;
@@ -43,6 +45,7 @@ const initialValues: CreateQuizFormValues = {
   title: "",
   description: "",
   isPublic: "true",
+  slides: "",
   questions: [
     {
       statement: "",
@@ -168,7 +171,7 @@ const CreateQuizForm = ({
       validationSchema={validationSchema}
       onSubmit={submitHandler}
     >
-      {({ isSubmitting, errors, values }) => (
+      {({ isSubmitting, errors, values, setFieldValue }) => (
         <Form className="flex flex-col gap-4">
           <div>
             <Field as={Input} name="title" label="Title" />
@@ -198,6 +201,10 @@ const CreateQuizForm = ({
                 <p className="text-xs">Only you can see this quiz.</p>
               </div>
             </div>
+          </div>
+          <div>
+            {/* <Field type="file" id="slides" name="slides" /> */}
+            <PresentationUpload id="" setFieldValue={setFieldValue} />
           </div>
           <div className="md:border rounded md:px-6 py-4 my-6">
             <p className="text-lg font-bold mb-4">Questions</p>

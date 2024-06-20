@@ -98,7 +98,7 @@ const createPresentationFromArgs = async (
   } catch (err) {
     return next(new HttpError("Creating presentation failed", 500));
   }
-  return createPresentation;
+  return true;
 };
 
 const createQuestionFromArgs = async (
@@ -133,8 +133,8 @@ export const createPresentation = async (
     return next(new HttpError("Invalid inputs", 422));
   }
 
-  const { title, description, isPublic, questions } = req.body; // questions will be an array
-
+  const { reqBody } = req.body;
+  const { title, description, isPublic, questions } = JSON.parse(reqBody); // questions will be an array
   const createdPresentation = await createPresentationFromArgs(
     title,
     description,
@@ -144,9 +144,10 @@ export const createPresentation = async (
     next
   );
 
-  res.status(201).json({
-    presentation: createdPresentation,
-  });
+  if (createdPresentation === true)
+    res.status(201).json({
+      presentation: createdPresentation,
+    });
 };
 
 export const getAllPublicPresentations = async (

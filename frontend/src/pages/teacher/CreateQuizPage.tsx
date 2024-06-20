@@ -36,6 +36,7 @@ const CreateQuizPage = () => {
     createQuizSubmitHandler({
       title: "Dummy",
       isPublic: "false",
+      slides: null,
       questions: [
         {
           _id: "new",
