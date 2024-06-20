@@ -19,7 +19,8 @@ interface GameData {
   joinRoom: (
     code: string,
     quizId: string,
-    quiz: QuizResponseData
+    quiz: QuizResponseData,
+    numOfSlides: number
   ) => Promise<void>;
   slides: Buffer[];
   addSlide: (slide: Buffer, page: number) => void;
@@ -139,12 +140,18 @@ const GameContextProvider = ({ children }: { children: ReactNode }) => {
   );
 
   const joinRoom = useCallback(
-    async (code: string, quizId: string, quiz: QuizResponseData) => {
+    async (
+      code: string,
+      quizId: string,
+      quiz: QuizResponseData,
+      numOfSlides: number
+    ) => {
       console.log("Joining room");
       setRoomCode(code || (Math.random() * 1000).toString());
       setQuizId(quizId);
       setLoadedQuiz(quiz);
       setQuestions(quiz.questions);
+      // assignQuestions(numOfSlides, quiz.questions);
     },
     []
   );
@@ -180,6 +187,7 @@ const GameContextProvider = ({ children }: { children: ReactNode }) => {
     },
     [socket, questions.length]
   );
+  const assignQuestions = () => {};
 
   const changeSlide = useCallback(
     (slideNumber: number, teacher?: boolean) => {

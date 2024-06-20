@@ -5,6 +5,7 @@ export interface IQuestion {
   id: string;
   statement: string;
   questionType: "MCQ" | "FRQ";
+  afterSlide: number;
   correctAnswer?: string;
   choices?: Schema<IChoices>;
   parentPresentation: PopulatedDoc<IPresentation>;
@@ -41,6 +42,10 @@ const questionSchema = new Schema<IQuestion>({
   questionType: {
     type: String,
     enum: ["MCQ", "FRQ"],
+    required: true,
+  },
+  afterSlide: {
+    type: Number,
     required: true,
   },
   correctAnswer: {

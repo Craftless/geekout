@@ -139,6 +139,7 @@ export interface QuizResponseData {
 export type Question = {
   _id: string;
   statement: string;
+  afterSlide: number;
   questionType: "" | "MCQ" | "FRQ";
   choices?: Choice[];
   correctAnswer?: string;

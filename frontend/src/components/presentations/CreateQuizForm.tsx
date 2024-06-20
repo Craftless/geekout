@@ -31,6 +31,7 @@ export interface CreateQuizFormValues {
   questions: {
     _id: string;
     statement: string;
+    afterSlide: number;
     questionType: "MCQ" | "FRQ" | "";
     correctAnswer?: string;
     choices?: {
@@ -51,6 +52,7 @@ const initialValues: CreateQuizFormValues = {
       statement: "",
       questionType: "",
       correctAnswer: "",
+      afterSlide: 0,
       choices: [
         {
           choiceNumber: 1,
@@ -71,6 +73,7 @@ const validationSchema = Yup.object().shape({
     .of(
       Yup.object().shape({
         statement: Yup.string().required("Question statement is required"),
+        afterSlide: Yup.number().required("After slide is required"),
         questionType: Yup.string()
           .oneOf(["MCQ", "FRQ"])
           .required("Question type is required"),
@@ -225,6 +228,17 @@ const CreateQuizForm = ({
                           />
                           <CustomErrorMessage
                             name={`questions[${index}].statement`}
+                          />
+                        </div>
+                        <div>
+                          <Field
+                            as={Input}
+                            name={`questions[${index}].afterSlide`}
+                            label="After Slide"
+                            placeholder="After slide"
+                          />
+                          <CustomErrorMessage
+                            name={`questions[${index}].afterSlide`}
                           />
                         </div>
                         <div className="grid w-full items-center gap-1.5">
@@ -390,6 +404,7 @@ const CreateQuizForm = ({
                         _id: "new",
                         statement: "",
                         questionType: "",
+                        afterSlide: 0,
                         correctAnswer: "",
                         choices: [
                           {

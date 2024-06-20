@@ -94,6 +94,7 @@ function socketMain(io: Server) {
             students: getRooms().get(room)?.students,
             qid: getRooms().get(room)?.quizId,
             quizData: getRooms().get(room)?.quizData,
+            numOfSlides: document.length,
           });
           if (getRooms().get(room)?.started) socket.emit("c_start_quiz");
         }

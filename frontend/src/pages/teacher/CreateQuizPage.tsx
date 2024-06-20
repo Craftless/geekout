@@ -40,6 +40,7 @@ const CreateQuizPage = () => {
       questions: [
         {
           _id: "new",
+          afterSlide: 0,
           questionType: "FRQ",
           statement: "statement",
           correctAnswer: "correct",
@@ -48,6 +49,7 @@ const CreateQuizPage = () => {
           _id: "new",
           questionType: "MCQ",
           statement: "mcq",
+          afterSlide: 0,
           choices: [
             {
               choiceNumber: 1,

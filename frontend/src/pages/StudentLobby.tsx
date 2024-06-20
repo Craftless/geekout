@@ -25,6 +25,7 @@ const StudentLobby = () => {
           students,
           qid,
           quizData,
+          numOfSlides,
         }: {
           status: {
             value: boolean | null;
@@ -33,6 +34,7 @@ const StudentLobby = () => {
           students?: string[];
           qid?: string;
           quizData?: QuizResponseData;
+          numOfSlides: number;
         }) => {
           if (status.value) {
             if (!students || !qid || !quizData) {
@@ -40,7 +42,7 @@ const StudentLobby = () => {
             }
             console.log(students);
             setStudents(students);
-            game.joinRoom(roomCode, qid, quizData);
+            game.joinRoom(roomCode, qid, quizData, numOfSlides);
             setRoomCode(roomCode);
           } else {
             if (status.value !== null) {
