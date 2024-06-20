@@ -24,7 +24,7 @@ const CreateQuizPage = () => {
       toast({
         variant: "default",
         title: "Success!",
-        description: "The quiz was successfully created.",
+        description: "The presentation was successfully created.",
         duration: 3000,
       });
       queryClient.invalidateQueries({ queryKey: ["quizzes"] });

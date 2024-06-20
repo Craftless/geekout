@@ -79,14 +79,14 @@ export async function fetchQuiz({
   qid,
 }: GETRequestFn & { qid?: string }) {
   if (!qid) throw new Error("Quiz does not exist!");
-  const { quiz } = await sendRequest({
+  const { presentation } = await sendRequest({
     url: `${import.meta.env.VITE_SERVER_ADDRESS}/api/quizzes/${qid}`,
     headers: {
       Authorization: "Bearer " + auth.token,
     },
     signal,
   });
-  return quiz as QuizResponseData;
+  return presentation as QuizResponseData;
 }
 
 export async function createQuiz({
@@ -136,7 +136,7 @@ export async function fetchQuizzes({
       Authorization: "Bearer " + auth.token,
     },
   });
-  const quizzes = respData.quizzes.map((quiz) => {
+  const quizzes = respData.presentations.map((quiz) => {
     const picked: any = pick(
       quiz,
       "title",
@@ -157,7 +157,7 @@ export async function fetchQuizzes({
 }
 
 interface ResponseData {
-  quizzes: [
+  presentations: [
     {
       __v: number;
       _id: string;
@@ -202,7 +202,7 @@ export const queryClient = new QueryClient({
         description: errorMessage || "There was a problem with your request.",
         duration: 3000,
       });
-      if (errorMessage.includes("log in again")) window.location.reload();
+      if (errorMessage?.includes("log in again")) window.location.reload();
     },
   }),
 });
