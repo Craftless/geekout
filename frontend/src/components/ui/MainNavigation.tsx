@@ -21,9 +21,9 @@ const MainNavigation = () => {
   function closeDrawer() {
     setDrawerIsOpen(false);
   }
-  function openDrawer() {
-    setDrawerIsOpen(true);
-  }
+  // function openDrawer() {
+  //   setDrawerIsOpen(true);
+  // }
 
   useEffect(() => {
     window.addEventListener("resize", closeDrawer);
