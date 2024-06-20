@@ -117,9 +117,12 @@ const HostLobby = () => {
   return (
     <div className="p-8 flex flex-col items-center">
       <p>Quiz ID: {game.quizId}</p>
-      <p className="text-lg md:text-2xl font-bold">
-        Room Code: {game.roomCode}
+      <p className="text-lg md:text-2xl font-bold my-2">
+        Room Code: <span className="text-yellow-400">{game.roomCode}</span>
       </p>
+      <div className="skeleton flex h-80 w-10/12 items-end justify-end rounded-sm bg-black/20 p-6">
+        <p> 20</p>{" "}
+      </div>
       <div className="flex max-w-[80%] flex-wrap gap-6 justify-center py-8">
         {game.students.map((s) => (
           <Card key={s.username} className="px-16 py-8">

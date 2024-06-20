@@ -13,6 +13,7 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
+import type { Choice } from "@/lib/utils";
 import {
   Dialog,
   DialogContent,
@@ -63,7 +64,12 @@ const ViewQuizPage = () => {
     queryKey: ["quiz", { qid }],
     queryFn: ({ signal }) => fetchQuiz({ signal, auth, qid }),
   });
-
+  const formatOptions = (options: Choice[]) => {
+    const labels = ["A", "B", "C", "D"]; // Assuming there are always up to four options
+    return options
+      .map((option, index) => `${labels[index]}) ${option.choiceBody}`)
+      .join(", ");
+  };
   const { mutate: deleteMutate, isPending: isPendingDeletion } = useMutation({
     mutationFn: deleteQuiz,
     onSuccess: () => {
@@ -150,7 +156,7 @@ const ViewQuizPage = () => {
       <DialogTrigger asChild>
         <Button>Host Room</Button>
       </DialogTrigger>
-      <DialogContent className="overflow-y-scroll max-h-[70%] w-[40%]">
+      <DialogContent className="overflow-y-hidden max-h-[70%] w-[40%]">
         <DialogHeader>
           <DialogTitle>Host Room</DialogTitle>
           <DialogDescription>Enter a room code.</DialogDescription>
@@ -215,11 +221,48 @@ const ViewQuizPage = () => {
   );
 
   return (
-    <div className="p-8 flex flex-col items-center">
+    <div className="p-3  flex flex-col items-center">
       {isPending && <LoadingSpinner asOverlay />}
-      <p>Title: {data.title}</p>
-      <p>Description: {data.description || "No description"}</p>
-      <p>{data.isPublic ? "Public" : "Private"}</p>
+      <div className="gap-2 my-5">
+        <h1 className="text-3xl font-semibold ">
+          {data.title} <span className="text-accent "></span>{" "}
+        </h1>
+        <p>Description: {data.description || "No description"}</p>
+        <p className="text-xs text-accent font-semibold">
+          {data.isPublic ? "Public" : "Private"}
+        </p>
+      </div>
+
+      <div className="skeleton flex h-80 w-10/12 items-end justify-end rounded-sm bg-black/20 p-6">
+        <p> 20</p>{" "}
+      </div>
+      <div className="my-5">{hostRoom}</div>
+
+      <div className="w-full">
+        <div className="overflow-x-auto">
+          <h3 className="font-semibold">Questions Generated: </h3>
+          <table className="table w-full">
+            {/* head */}
+            <thead>
+              <tr>
+                <th>Q#</th>
+                <th>Question</th>
+                <th>Options</th>
+              </tr>
+            </thead>
+            <tbody>
+              {data.questions.map((question, index) => (
+                <tr key={question._id}>
+                  <th>{index + 1}</th>
+                  <td>{question.statement}</td>
+                  <td>{question.choices && formatOptions(question.choices)}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
       <div className="flex gap-4 py-6">
         {data.creator._id === auth.id && (
           <>
@@ -251,13 +294,8 @@ const ViewQuizPage = () => {
             {editQuiz}
           </>
         )}
-        {hostRoom}
       </div>
       <Separator />
-      <div className="py-6">
-        <p>Data for UI/UX designers to think about incorporating:</p>
-        <JSONPretty data={data} />
-      </div>
     </div>
   );
 };
