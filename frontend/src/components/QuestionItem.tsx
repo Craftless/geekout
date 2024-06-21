@@ -25,13 +25,14 @@ const QuestionItem = ({
   question,
   roomCode,
 }: {
-  question: Question;
+  question: Question | undefined;
   roomCode: string;
 }) => {
   const { toast } = useToast();
   const [submittedAnswer, setSubmittedAnswer] = useState("");
   const game = useContext(GameContext);
   function submitAnswer(answer: string) {
+    if (!question) return;
     if (submittedAnswer) return;
     setSubmittedAnswer(answer);
     console.log("map", game.questionNumberMap);
@@ -60,6 +61,10 @@ const QuestionItem = ({
   useEffect(() => {
     setSubmittedAnswer("");
   }, [question]);
+
+  if (!question) {
+    return <p>Waiting for question...</p>;
+  }
 
   return (
     <div>
