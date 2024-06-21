@@ -145,8 +145,8 @@ const HostLobby = () => {
       </div>
       <div className="flex max-w-[80%] flex-wrap gap-6 justify-center py-8">
         {game.students.map((s) => (
-          <Card key={s.username} className="px-16 py-8">
-            <p>{s.username}</p>
+          <Card key={s.student} className="px-16 py-8">
+            <p>{s.student}</p>
           </Card>
         ))}
       </div>

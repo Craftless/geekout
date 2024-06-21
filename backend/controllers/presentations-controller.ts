@@ -3,6 +3,9 @@ import { HttpError } from "../util/http-error";
 
 import { NextFunction, Request, Response } from "express";
 import { validationResult } from "express-validator";
+import { writeFile } from "fs";
+import path from "path";
+import { pdf } from "pdf-to-img";
 import Presentation, { IPresentation } from "../models/presentation";
 import Question, { IQuestion } from "../models/question";
 import User, { IUser } from "../models/user";
@@ -60,6 +63,7 @@ const createPresentationFromArgs = async (
   description: string,
   isPublic: string,
   slides: string,
+  slideCount: number,
   questions: any,
   creator: string,
   next: NextFunction
@@ -70,6 +74,7 @@ const createPresentationFromArgs = async (
       description,
       isPublic,
       slides,
+      slideCount,
       questions: [],
       creator,
     }
@@ -143,11 +148,37 @@ export const createPresentation = async (
   const { reqBody } = req.body;
   const { title, description, isPublic, questions } = JSON.parse(reqBody); // questions will be an array
   console.log(req.file?.filename);
+
+  // @ts-ignore
+  const __dirname = dirname(fileURLToPath(import.meta.url));
+  const document = await pdf(
+    path.join(__dirname, "..", "uploads", "slides", req.file.filename)
+  );
+  for await (const image of document) {
+    writeFile(
+      path.join(
+        __dirname,
+        "..",
+        "images",
+        req.file.filename.split(".pdf")[0] + ".png"
+      ),
+      image,
+      (err) => {
+        if (err) {
+          return console.log("There was an error saving the file");
+        }
+        console.log("The file was saved");
+      }
+    );
+    break;
+  }
+
   const createdPresentation = await createPresentationFromArgs(
     title,
     description,
     isPublic,
     req.file.filename,
+    document.length,
     questions,
     req.userData!.userId,
     next

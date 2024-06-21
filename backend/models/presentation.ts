@@ -8,6 +8,7 @@ export interface IPresentation {
   description?: string;
   isPublic: boolean;
   slides: string;
+  slideCount: number;
   questions: PopulatedDoc<IQuestion>[];
   creator: PopulatedDoc<IUser>;
 }
@@ -27,6 +28,10 @@ const presentationSchema = new Schema<IPresentation>(
     },
     slides: {
       type: String,
+      required: true,
+    },
+    slideCount: {
+      type: Number,
       required: true,
     },
     questions: [

@@ -15,10 +15,10 @@ const UserQuizzesListPage = () => {
   });
 
   return (
-    <>
+    <div className="h-fullh">
       {!isPending && !!data && <QuizzesList data={data} />}
       {isPending && <QuizzesListSkeleton />}
-    </>
+    </div>
   );
 };
 

@@ -3,6 +3,7 @@ import path, { dirname } from "path";
 import { pdf } from "pdf-to-img";
 import { Server, Socket } from "socket.io";
 import { fileURLToPath } from "url";
+import { openai } from "../server";
 import {
   QuizResponseData,
   StudentResponse,
@@ -72,17 +73,13 @@ function socketMain(io: Server) {
           socket.username = username;
           await socket.join(room);
           socket.roomCode = room;
+          console.log("COde", socket.roomCode);
           console.log("Successful join");
           io.to(room).emit("student_join", { username });
+          // @ts-ignore
+          const __dirname = dirname(fileURLToPath(import.meta.url));
           const document = await pdf(
-            path.join(
-              // @ts-ignore
-              dirname(fileURLToPath(import.meta.url)),
-              "..",
-              "uploads",
-              "slides",
-              rm.quizData.slides
-            )
+            path.join(__dirname, "..", "uploads", "slides", rm.quizData.slides)
           );
           let count = 0;
           for await (const image of document) {
@@ -152,15 +149,6 @@ function socketMain(io: Server) {
       }));
       ack();
     });
-    socket.on("s_change_question", (questionNumber) => {
-      if (!socket.host) return;
-      const room = getRooms().get(socket.host);
-      if (!room) return;
-      if (!room.started) return;
-      console.log("server change question ", questionNumber);
-      io.to(socket.host).emit("c_change_question", questionNumber);
-      room.currentQuestion = questionNumber;
-    });
     socket.on("s_change_slide", (slideNumber) => {
       if (!socket.host) return;
       const room = getRooms().get(socket.host);
@@ -170,13 +158,20 @@ function socketMain(io: Server) {
       io.to(socket.host).emit("c_change_slide", slideNumber);
       room.currentSlide = slideNumber;
     });
-    socket.on("s_submit_answer", (roomCode, answer) => {
+    socket.on("s_submit_answer", (roomCode, answer, qnId, questionNumber) => {
       if (!socket.username) return;
       const hostId = getRooms().get(roomCode)?.hostId;
       if (!hostId) return;
       console.log("Submitting answer", answer);
       const id = randomUUID();
-      const response = submitAnswer(roomCode, socket.username, answer, id);
+      const response = submitAnswer(
+        roomCode,
+        socket.username,
+        answer,
+        id,
+        qnId,
+        questionNumber
+      );
       if (!response) return;
       updateResponseStatus(io, socket, response, response.status);
       io.to(hostId).emit("t_submit_answer", response);
@@ -196,7 +191,34 @@ function socketMain(io: Server) {
       if (!socket.host) return;
       const scores = fetchScores(socket.host);
       if (!scores) return;
-      io.to(socket.host).emit("t_fetch_scores", scores);
+      io.to(socket.host).emit("c_fetch_scores", scores);
+    });
+    socket.on("s_autograde", async (response: StudentResponse) => {
+      if (!socket.host) return;
+      const question = getRooms()
+        .get(socket.host)
+        ?.quizData.questions.find((qn) => qn._id === response.qnId);
+      if (!question) return;
+      const completion = await openai.chat.completions.create({
+        messages: [
+          {
+            role: "system",
+            content:
+              "You are a teacher grading free response questions. Given the question and a student response, respond with only one word, either 'Correct' or 'Incorrect' based on how a teacher would grade the student's response to the given question.",
+          },
+          {
+            role: "user",
+            content: `Question: ${question.statement}. Student Response: ${response.answer}`,
+          },
+        ],
+        model: "gpt-4o",
+      });
+      const responseMessage = completion.choices[0].message.content;
+      console.log(responseMessage);
+      let status: StudentResponseStatus = "Graded";
+      if (responseMessage?.includes("Correct")) status = "Correct";
+      else if (responseMessage?.includes("Incorrect")) status = "Incorrect";
+      updateResponseStatus(io, socket, response, status);
     });
   });
 }
@@ -213,6 +235,10 @@ const updateResponseStatus = (
     ...response,
     status,
   } as StudentResponse);
+
+  const scores = fetchScores(socket.host);
+  if (!scores) return;
+  io.to(socket.host).emit("c_fetch_scores", scores);
 };
 
 export default socketMain;

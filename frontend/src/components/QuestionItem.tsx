@@ -1,3 +1,4 @@
+import { GameContext } from "@/context/game-context";
 import {
   Choice,
   Question,
@@ -7,7 +8,7 @@ import {
 } from "@/lib/utils";
 import { socket } from "@/socket";
 import { Field, Form, Formik } from "formik";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Button } from "./ui/button";
 import { Textarea } from "./ui/textarea";
 import { useToast } from "./ui/use-toast";
@@ -29,10 +30,18 @@ const QuestionItem = ({
 }) => {
   const { toast } = useToast();
   const [submittedAnswer, setSubmittedAnswer] = useState("");
+  const game = useContext(GameContext);
   function submitAnswer(answer: string) {
     if (submittedAnswer) return;
     setSubmittedAnswer(answer);
-    socket.emitEvent("s_submit_answer", roomCode, answer);
+    console.log("map", game.questionNumberMap);
+    socket.emitEvent(
+      "s_submit_answer",
+      roomCode,
+      answer,
+      question._id,
+      game.questionNumberMap[question._id]
+    );
     toast({
       variant: "default",
       title: "Success!",
@@ -90,7 +99,7 @@ const QuestionItem = ({
               >
                 <div className="col-start-1 col-span-1 justify-self-center self-center rounded-full bg-sky-700 h-8 w-8 flex justify-center items-center">
                   <p className="text-center text-white">
-                    {numberToString(choice.choiceNumber + 1).toUpperCase()}
+                    {numberToString(choice.choiceNumber).toUpperCase()}
                   </p>
                 </div>
                 <p className="flex flex-1 col-start-2 col-span-1">

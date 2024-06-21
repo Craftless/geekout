@@ -4,6 +4,8 @@ import express, { NextFunction, Request, Response } from "express";
 import mongoSanitise from "express-mongo-sanitize";
 import http from "http";
 import mongoose from "mongoose";
+import OpenAI from "openai";
+import path from "path";
 import { Server } from "socket.io";
 import presentationsRoutes from "./routes/presentations-routes";
 import usersRoutes from "./routes/users-routes";
@@ -19,6 +21,10 @@ declare module "express-serve-static-core" {
     };
   }
 }
+
+export const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+
+app.use("/images", express.static(path.join("images")));
 
 app.use(express.json());
 

@@ -106,6 +106,24 @@ export const columns: ColumnDef<StudentResponse>[] = [
                 Mark correct
               </DropdownMenuItem>
               <DropdownMenuItem
+                onClick={() => {
+                  socket.emitEvent(
+                    "s_update_response_status",
+                    response,
+                    "Incorrect"
+                  );
+                }}
+              >
+                Mark wrong
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={() => {
+                  socket.emitEvent("s_autograde", response);
+                }}
+              >
+                AI Autograding
+              </DropdownMenuItem>
+              <DropdownMenuItem
                 className="text-destructive"
                 onClick={() => {
                   table.resetRowSelection();

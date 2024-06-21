@@ -119,6 +119,36 @@ export function DataTable<TData, TValue>({
               >
                 Mark Correct
               </Button>
+              <Button
+                className="h-8"
+                variant="default"
+                onClick={() => {
+                  table.getFilteredSelectedRowModel().rows.forEach((row) => {
+                    const data = row.original as StudentResponse;
+                    socket.emitEvent(
+                      "s_update_response_status",
+                      data,
+                      "Incorrect"
+                    );
+                  });
+                  table.resetRowSelection();
+                }}
+              >
+                Mark Incorrect
+              </Button>
+              <Button
+                className="h-8"
+                variant="default"
+                onClick={() => {
+                  table.getFilteredSelectedRowModel().rows.forEach((row) => {
+                    const data = row.original as StudentResponse;
+                    socket.emitEvent("s_autograde", data);
+                  });
+                  table.resetRowSelection();
+                }}
+              >
+                AI Autograde
+              </Button>
             </>
           )}
           <DataTableViewOptions table={table} />

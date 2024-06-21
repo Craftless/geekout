@@ -2,6 +2,7 @@ import EditQuizComponent from "@/components/EditQuizComponent";
 import CustomErrorMessage from "@/components/ui/CustomErrorMessage";
 import { Input } from "@/components/ui/CustomInput";
 import LoadingSpinner from "@/components/ui/LoadingSpinner";
+import PresentationPreview from "@/components/ui/PresentationPreview";
 import {
   AlertDialog,
   AlertDialogCancel,
@@ -13,7 +14,6 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
-import type { Choice } from "@/lib/utils";
 import {
   Dialog,
   DialogContent,
@@ -42,12 +42,12 @@ import {
 import { useToast } from "@/components/ui/use-toast";
 import { AuthContext } from "@/context/auth-context";
 import { useMediaQuery } from "@/hooks/use-media-query";
+import type { Choice } from "@/lib/utils";
 import { desktop } from "@/lib/utils";
 import { deleteQuiz, fetchQuiz } from "@/utils/http";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Field, Form, Formik, FormikHelpers } from "formik";
 import { useContext, useState } from "react";
-import JSONPretty from "react-json-pretty";
 import "react-json-pretty/themes/monikai.css";
 import { useNavigate, useParams } from "react-router-dom";
 import * as Yup from "yup";
@@ -232,12 +232,11 @@ const ViewQuizPage = () => {
           {data.isPublic ? "Public" : "Private"}
         </p>
       </div>
-
-      <div className="skeleton flex h-80 w-10/12 items-end justify-end rounded-sm bg-black/20 p-6">
-        <p> 20</p>{" "}
-      </div>
+      <PresentationPreview slides={data.slides} height={null} width="10/12" />
+      <p>{data.slideCount}</p>{" "}
+      {/* <div className="skeleton flex h-80 w-10/12 items-end justify-end rounded-sm bg-black/20 p-6">
+      </div> */}
       <div className="my-5">{hostRoom}</div>
-
       <div className="w-full">
         <div className="overflow-x-auto">
           <h3 className="font-semibold">Questions Generated: </h3>
@@ -269,7 +268,6 @@ const ViewQuizPage = () => {
           </table>
         </div>
       </div>
-
       <div className="flex gap-4 py-6">
         {data.creator._id === auth.id && (
           <>

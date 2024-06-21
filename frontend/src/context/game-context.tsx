@@ -4,6 +4,7 @@ import {
   Question,
   QuizResponseData,
   StudentResponse,
+  StudentScores,
   getRandomInt,
 } from "@/lib/utils";
 import { socket } from "@/socket";
@@ -19,7 +20,7 @@ import { AuthContext } from "./auth-context";
 
 interface GameData {
   quizId: string;
-  students: { username: string; score: number[] }[];
+  students: StudentScores[];
   createRoom: (code: string, quizId: string) => Promise<void>;
   joinRoom: (
     code: string,
@@ -29,7 +30,10 @@ interface GameData {
   ) => Promise<void>;
   slides: Buffer[];
   slideNumberToQuestion: (Question | undefined)[];
+  questionNumberMap: { [key: string]: number };
+  setScores: (scores: StudentScores[]) => void;
   addSlide: (slide: Buffer, page: number) => void;
+  setStudentsAndScores: (students: string[]) => void;
   addStudent: (username: string) => void;
   removeStudent: (username: string) => void;
   startQuiz: () => string;
@@ -58,10 +62,13 @@ export const GameContext = createContext<GameData>({
   slideNumberToQuestion: [],
   studentResponses: [],
   slides: [],
+  questionNumberMap: {},
+  setScores: () => {},
   addSlide: () => {},
   createRoom: async () => {},
   getQuestions: () => {},
   joinRoom: async () => {},
+  setStudentsAndScores: () => {},
   addStudent: () => {},
   removeStudent: () => {},
   startQuiz: () => "",
@@ -74,25 +81,38 @@ export const GameContext = createContext<GameData>({
 
 const GameContextProvider = ({ children }: { children: ReactNode }) => {
   const [quizId, setQuizId] = useState("");
-  const [students, setStudents] = useState<
-    { username: string; score: number[] }[]
-  >([]);
+  const [students, setStudents] = useState<StudentScores[]>([]);
   const [loadedQuiz, setLoadedQuiz] = useState<QuizResponseData>();
   const [slides, setSlides] = useState<Buffer[]>([]);
   const [roomCode, setRoomCode] = useState("");
-  // const [data, setData] = useState<QuizResponseData>();
   const [questions, setQuestions] = useState<Question[]>([]);
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [slideNumberToQuestion, setSlideNumberToQuestion] = useState<
     (Question | undefined)[]
   >([]);
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [questionNumberMap, setQuestionNumberMap] = useState<{
+    [key: string]: number;
+  }>({});
+
   const { sendRequest } = useHttpClient();
   const auth = useContext(AuthContext);
   const { toast } = useToast();
   const [studentResponses, setStudentResponses] = useState<StudentResponse[]>(
     []
   );
+
+  useEffect(() => {
+    const mp: { [key: string]: number } = {};
+    let count = 0;
+    slideNumberToQuestion.forEach((v) => {
+      if (v) {
+        mp[v._id] = count;
+        count++;
+      }
+    });
+    setQuestionNumberMap(mp);
+  }, [slideNumberToQuestion]);
 
   const retrieveData = useCallback(
     async (qid: string) => {
@@ -167,11 +187,24 @@ const GameContextProvider = ({ children }: { children: ReactNode }) => {
   );
 
   const addStudent = useCallback((username: string) => {
-    setStudents((prev) => [...prev, { username, score: [] }]);
+    setStudents((prev) => [
+      ...prev,
+      { student: username, scoresByQuestion: [] },
+    ]);
+  }, []);
+
+  const setStudentsAndScores = useCallback((students: string[]) => {
+    setStudents(
+      students.map((stu) => ({ student: stu, scoresByQuestion: [] }))
+    );
   }, []);
 
   const removeStudent = useCallback((username: string) => {
-    setStudents((prev) => prev.filter((s) => s.username !== username));
+    setStudents((prev) => prev.filter((s) => s.student !== username));
+  }, []);
+
+  const setScores = useCallback((scores: StudentScores[]) => {
+    setStudents(scores);
   }, []);
 
   const startQuiz = useCallback(() => {
@@ -198,6 +231,8 @@ const GameContextProvider = ({ children }: { children: ReactNode }) => {
     [socket, questions.length]
   );
   const assignQuestions = (numOfSlides: number, questions: Question[]) => {
+    let count = 0;
+    console.log("quesitons", questions);
     for (const question of questions) {
       const afterSlide = question.afterSlide;
       for (let i = 0; i < 5; i++) {
@@ -212,6 +247,7 @@ const GameContextProvider = ({ children }: { children: ReactNode }) => {
           break;
         }
       }
+      count++;
     }
   };
 
@@ -233,6 +269,7 @@ const GameContextProvider = ({ children }: { children: ReactNode }) => {
   }, []);
 
   const updateStudentResponse = (response: StudentResponse) => {
+    alert("Updating student response");
     setStudentResponses((cur) => {
       const idx = cur.findIndex((val) => val.id === response.id);
       if (idx !== -1) cur[idx] = response;
@@ -260,9 +297,12 @@ const GameContextProvider = ({ children }: { children: ReactNode }) => {
         students,
         loadedQuiz,
         questions,
+        questionNumberMap,
         slideNumberToQuestion,
         currentQuestion,
         currentSlide,
+        setStudentsAndScores,
+        setScores,
         studentResponses,
         slides,
         addSlide,
