@@ -317,7 +317,7 @@ const CreateQuizForm = ({
                                             <div className="col-start-1 col-span-1 justify-self-center self-center rounded-full bg-sky-700 h-8 w-8 flex justify-center items-center">
                                               <p className="text-center text-white">
                                                 {numberToString(
-                                                  choiceIndex
+                                                  choiceIndex + 1
                                                 ).toUpperCase()}
                                               </p>
                                             </div>
@@ -426,35 +426,39 @@ const CreateQuizForm = ({
                       </div>
                     </div>
                   ))}
-                  <Button
-                    type="button"
-                    onClick={() =>
-                      arrayHelpers.push({
-                        _id: "new",
-                        statement: "",
-                        questionType: "",
-                        afterSlide: 0,
-                        correctAnswer: "",
-                        choices: [
-                          {
-                            choiceNumber: 1,
-                            choiceBody: "",
-                            correctChoice: false,
-                          },
-                        ],
-                      })
-                    }
-                    variant={"default"}
-                  >
-                    Add a question
-                  </Button>
-                  <Button
-                    type="button"
-                    onClick={() => AIGenerateQuestions(arrayHelpers, values)}
-                    variant={"default"}
-                  >
-                    Let AI generate questions
-                  </Button>
+                  <div className="w-full flex flex-row gap-4">
+                    <Button
+                      className="flex-1"
+                      type="button"
+                      onClick={() =>
+                        arrayHelpers.push({
+                          _id: "new",
+                          statement: "",
+                          questionType: "",
+                          afterSlide: 0,
+                          correctAnswer: "",
+                          choices: [
+                            {
+                              choiceNumber: 1,
+                              choiceBody: "",
+                              correctChoice: false,
+                            },
+                          ],
+                        })
+                      }
+                      variant={"default"}
+                    >
+                      Add a question
+                    </Button>
+                    <Button
+                      className="flex-1"
+                      type="button"
+                      onClick={() => AIGenerateQuestions(arrayHelpers, values)}
+                      variant={"secondary"}
+                    >
+                      Let AI generate questions
+                    </Button>
+                  </div>
                 </div>
               )}
             />

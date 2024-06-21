@@ -1,5 +1,4 @@
 import { columns } from "@/components/tables/responses/columns";
-import PresentationPreview from "@/components/ui/PresentationPreview";
 import { Button } from "@/components/ui/button";
 import { DataTable } from "@/components/ui/data-table";
 import { useToast } from "@/components/ui/use-toast";
@@ -53,13 +52,12 @@ const TeacherQuizPage = () => {
   return (
     <div className="h-full p-4">
       <div>
-        <PresentationPreview
-          width="w-[320px]"
-          height="w-[600px]"
-          imgWidth={320}
-          imgHeight={600}
-          slides={game.loadedQuiz.slides}
-          className="mx-auto my-5"
+        <img
+          width={600}
+          height={320}
+          className="mx-auto my-5 w-[600px] h-[320px] object-contain"
+          src={URL.createObjectURL(new Blob([game.slides[game.currentSlide]]))}
+          alt="image"
         />
       </div>
       <div className="flex w-full flex-row justify-center gap-4">

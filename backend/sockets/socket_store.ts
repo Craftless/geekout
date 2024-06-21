@@ -102,12 +102,13 @@ export function submitAnswer(
 ) {
   const room = rooms.get(roomCode);
   if (!room) return;
-  let correct = false;
+  let status: StudentResponseStatus = "Ungraded";
   const currentQuestion = room.quizData.questions.find((qn) => qn._id === qnId);
   if (!currentQuestion) return;
   if (currentQuestion.questionType === "FRQ") {
-    correct = answer === currentQuestion.correctAnswer; // placeholder
+    if (answer === currentQuestion.correctAnswer) status = "Correct";
   } else if (currentQuestion.questionType === "MCQ") {
+    let correct = false;
     const correctChoices = currentQuestion.choices?.filter(
       (val) => val.correctChoice
     );
@@ -116,6 +117,7 @@ export function submitAnswer(
         (val) => parseInt(answer.split(":")[0]) === val.choiceNumber
       );
     }
+    status = correct ? "Correct" : "Incorrect";
   }
   const response: StudentResponse = {
     username,
@@ -123,7 +125,7 @@ export function submitAnswer(
     id,
     qnId,
     questionNumber,
-    status: correct ? "Correct" : "Ungraded",
+    status,
   };
   console.log(questionNumber);
   console.log(room.answers.length, room.totalQuestions);

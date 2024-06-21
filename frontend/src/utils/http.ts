@@ -111,6 +111,8 @@ export async function createQuiz({
   const { questions, slides, ...quizInfo } = values;
   const cleanedQuestions = [];
 
+  console.log("Creating");
+
   for (const question of questions) {
     if (question.questionType === "MCQ") delete question.correctAnswer;
     if (question.questionType === "FRQ") delete question.choices;
