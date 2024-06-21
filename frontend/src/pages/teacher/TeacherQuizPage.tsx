@@ -1,4 +1,5 @@
 import { columns } from "@/components/tables/responses/columns";
+import PresentationPreview from "@/components/ui/PresentationPreview";
 import { Button } from "@/components/ui/button";
 import { DataTable } from "@/components/ui/data-table";
 import { useToast } from "@/components/ui/use-toast";
@@ -13,10 +14,6 @@ const TeacherQuizPage = () => {
   const game = useContext(GameContext);
   const navigate = useNavigate();
   const { toast } = useToast();
-
-  useEffect(() => {
-    // alert(game.studentResponses);
-  }, [game.studentResponses]);
 
   useInit(() => {
     socket.emitEvent("s_start_quiz", () => {
@@ -54,34 +51,36 @@ const TeacherQuizPage = () => {
     return <p>Loading</p>;
   }
   return (
-    <div className="h-fullh">
+    <div className="h-full p-4">
       <div>
-        <div className="skeleton w-72 h-44 mx-auto my-5"></div>
+        <PresentationPreview
+          width="w-[320px]"
+          height="w-[600px]"
+          imgWidth={320}
+          imgHeight={600}
+          slides={game.loadedQuiz.slides}
+          className="mx-auto my-5"
+        />
+      </div>
+      <div className="flex w-full flex-row justify-center gap-4">
+        <Button
+          onClick={() => {
+            game.changeSlide(game.currentSlide - 1, true);
+          }}
+        >
+          Previous slide
+        </Button>
+        <Button
+          onClick={() => {
+            game.changeSlide(game.currentSlide + 1, true);
+          }}
+        >
+          Next slide
+        </Button>
       </div>
       <div className="container mx-auto py-10">
         <DataTable columns={columns} data={game.studentResponses} />
       </div>
-      <Button
-        onClick={() => {
-          game.changeSlide(game.currentSlide - 1, true);
-        }}
-      >
-        Previous slide
-      </Button>
-      <Button
-        onClick={() => {
-          game.changeSlide(game.currentSlide + 1, true);
-        }}
-      >
-        Next slide
-      </Button>
-      <Button
-        onClick={() => {
-          socket.emitEvent("s_fetch_scores");
-        }}
-      >
-        Fetch Scores
-      </Button>
     </div>
   );
 };

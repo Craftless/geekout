@@ -1,5 +1,6 @@
 import CustomErrorMessage from "@/components/ui/CustomErrorMessage";
 import { Input } from "@/components/ui/CustomInput";
+import PresentationPreview from "@/components/ui/PresentationPreview";
 import {
   AlertDialog,
   AlertDialogContent,
@@ -123,10 +124,17 @@ const HostLobby = () => {
           Room Code: <span className="text-yellow-400">{game.roomCode}</span>
         </p>
       </div>
-
-      <div className="skeleton flex h-80 w-10/12 items-end justify-end rounded-sm bg-black/20 p-6">
+      <PresentationPreview
+        width="w-[600px]"
+        height="h-[320px]"
+        imgWidth={600}
+        imgHeight={320}
+        slides={game.loadedQuiz?.slides}
+        className="flex items-end justify-end rounded-sm bg-black/20"
+      />
+      {/* <div className="skeleton flex h-80 w-10/12 items-end justify-end rounded-sm bg-black/20 p-6">
         <p> 20</p>{" "}
-      </div>
+      </div> */}
       <p className="text-xs opacity-20">Quiz ID: {game.quizId}</p>
       <div className="my-6">
         <button
