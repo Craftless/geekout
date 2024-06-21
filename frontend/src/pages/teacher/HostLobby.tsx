@@ -127,6 +127,8 @@ const HostLobby = () => {
       <PresentationPreview
         width="w-[600px]"
         height="h-[320px]"
+        imgWidth={600}
+        imgHeight={320}
         slides={game.loadedQuiz?.slides}
         className="flex items-end justify-end rounded-sm bg-black/20"
       />

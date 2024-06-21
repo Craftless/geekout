@@ -236,6 +236,8 @@ const ViewQuizPage = () => {
         slides={data.slides}
         height="h-[320px]"
         width="w-[600px]"
+        imgWidth={600}
+        imgHeight={320}
       />
       <p>{data.slideCount}</p>{" "}
       {/* <div className="skeleton flex h-80 w-10/12 items-end justify-end rounded-sm bg-black/20 p-6">

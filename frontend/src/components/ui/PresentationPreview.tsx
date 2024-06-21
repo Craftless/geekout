@@ -6,11 +6,15 @@ const PresentationPreview = ({
   height = "h-32",
   width = "w-64",
   className,
+  imgWidth,
+  imgHeight,
 }: {
   slides?: string;
   height?: string | null;
   width?: string | null;
   className?: string;
+  imgWidth?: number;
+  imgHeight?: number;
 }) => {
   const [loaded, setLoaded] = useState(false);
   return (
@@ -18,6 +22,8 @@ const PresentationPreview = ({
     <>
       {slides && (
         <img
+          width={imgWidth}
+          height={imgHeight}
           className={cn(
             loaded ? width : 0,
             loaded ? height : 0,

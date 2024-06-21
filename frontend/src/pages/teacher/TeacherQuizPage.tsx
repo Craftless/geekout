@@ -56,6 +56,8 @@ const TeacherQuizPage = () => {
         <PresentationPreview
           width="w-[320px]"
           height="w-[600px]"
+          imgWidth={320}
+          imgHeight={600}
           slides={game.loadedQuiz.slides}
           className="mx-auto my-5"
         />
