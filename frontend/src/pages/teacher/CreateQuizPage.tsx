@@ -1,4 +1,4 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useToast } from "@/components/ui/use-toast";
 import { AuthContext } from "@/context/auth-context";
 import { useMediaQuery } from "@/hooks/use-media-query";
@@ -55,9 +55,9 @@ const CreateQuizPage = () => {
   return (
     <div className="py-4">
       {isDesktop && (
-        <Card className="mx-auto w-full md:w-1/2 shadow-md px-12 py-8 md:rounded-xl flex flex-col justify-center">
+        <div className="mx-auto w-full md:w-1/2 shadow-md px-12 py-8 md:rounded-xl flex flex-col justify-center">
           {content}
-        </Card>
+        </div>
       )}
       {!isDesktop && <div className="py-4 px-6">{content}</div>}
     </div>
