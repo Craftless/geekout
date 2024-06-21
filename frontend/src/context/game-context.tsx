@@ -269,7 +269,6 @@ const GameContextProvider = ({ children }: { children: ReactNode }) => {
   }, []);
 
   const updateStudentResponse = (response: StudentResponse) => {
-    alert("Updating student response");
     setStudentResponses((cur) => {
       const idx = cur.findIndex((val) => val.id === response.id);
       if (idx !== -1) cur[idx] = response;

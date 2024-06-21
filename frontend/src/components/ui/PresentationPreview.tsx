@@ -1,27 +1,39 @@
+import { cn } from "@/lib/utils";
 import { useState } from "react";
 
 const PresentationPreview = ({
   slides,
-  height = 32,
-  width = 64,
+  height = "h-32",
+  width = "w-64",
+  className,
 }: {
-  slides: string;
-  height?: number | string | null;
-  width?: number | string | null;
+  slides?: string;
+  height?: string | null;
+  width?: string | null;
+  className?: string;
 }) => {
   const [loaded, setLoaded] = useState(false);
   return (
+    // <div className={cn(`w-${width}`, `h-${height}`, className)}>
     <>
-      <img
-        className={`w-${loaded ? width : 0} h-${
-          loaded ? height : 0
-        } object-cover`}
-        src={`${import.meta.env.VITE_SERVER_ADDRESS}/images/${
-          slides.split(".pdf")[0] + ".png"
-        }`}
-        onLoad={() => setLoaded(true)}
-      />
-      {!loaded && <div className={`skeleton w-${width} h-${height}`}></div>}
+      {slides && (
+        <img
+          className={cn(
+            loaded ? width : 0,
+            loaded ? height : 0,
+            "object-contain bg-black/20",
+            className
+          )}
+          src={`${import.meta.env.VITE_SERVER_ADDRESS}/images/${
+            slides.split(".pdf")[0] + ".png"
+          }`}
+          onLoad={() => setLoaded(true)}
+        />
+      )}
+      {(!loaded || !slides) && (
+        <div className={cn(`skeleton w-${width} h-${height}`, className)}></div>
+      )}
+      {/* </div> */}
     </>
   );
 };
