@@ -191,7 +191,7 @@ function socketMain(io: Server) {
       if (!socket.host) return;
       const scores = fetchScores(socket.host);
       if (!scores) return;
-      io.to(socket.host).emit("t_fetch_scores", scores);
+      io.to(socket.host).emit("c_fetch_scores", scores);
     });
     socket.on("s_autograde", async (response: StudentResponse) => {
       if (!socket.host) return;
@@ -235,6 +235,10 @@ const updateResponseStatus = (
     ...response,
     status,
   } as StudentResponse);
+
+  const scores = fetchScores(socket.host);
+  if (!scores) return;
+  io.to(socket.host).emit("c_fetch_scores", scores);
 };
 
 export default socketMain;

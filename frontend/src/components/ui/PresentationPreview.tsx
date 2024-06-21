@@ -13,7 +13,9 @@ const PresentationPreview = ({
   return (
     <>
       <img
-        className={`w-${width} h-${height} object-cover`}
+        className={`w-${loaded ? width : 0} h-${
+          loaded ? height : 0
+        } object-cover`}
         src={`${import.meta.env.VITE_SERVER_ADDRESS}/images/${
           slides.split(".pdf")[0] + ".png"
         }`}

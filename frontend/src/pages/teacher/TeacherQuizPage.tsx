@@ -42,8 +42,8 @@ const TeacherQuizPage = () => {
     socket.addEvent("t_delete_answer", (id: string) => {
       game.removeStudentResponse(id);
     });
-    socket.addEvent("t_fetch_scores", (scores: StudentScores) => {
-      console.log(scores);
+    socket.addEvent("c_fetch_scores", (scores: StudentScores[]) => {
+      game.setScores(scores);
     });
     socket.addEvent("t_update_response_status", (resp: StudentResponse) => {
       game.updateStudentResponse(resp);
@@ -53,20 +53,11 @@ const TeacherQuizPage = () => {
   if (!game.loadedQuiz) {
     return <p>Loading</p>;
   }
-  const currentQuestion = game.questions[game.currentQuestion];
   return (
-    <div>
-      {JSON.stringify(game.studentResponses)}
-      <p>
-        Question: {game.currentQuestion + 1}/{game.questions.length}
-      </p>
+    <div className="h-fullh">
       <div>
         <div className="skeleton w-72 h-44 mx-auto my-5"></div>
       </div>
-      <p className="italic text-xl">{currentQuestion.statement}</p>
-
-      <p>Type: {currentQuestion.questionType}</p>
-
       <div className="container mx-auto py-10">
         <DataTable columns={columns} data={game.studentResponses} />
       </div>
